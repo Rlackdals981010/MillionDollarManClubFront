@@ -5,6 +5,7 @@ import 'chart.js/auto';
 import { jwtDecode } from 'jwt-decode';
 import './Home.css';
 
+// Date 객체로 변환하는 헬퍼 함수
 const parseDate = (date) => {
   if (date instanceof Date) return date;
   if (typeof date === 'string') return new Date(date);
@@ -20,17 +21,15 @@ function Home() {
   const [dailyQuest, setDailyQuest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentYear, setCurrentYear] = useState(new Date().getUTCFullYear());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getUTCMonth() + 1);
 
-  // UTC 기준으로 현재 날짜 설정
-  const currentDateObj = new Date(); // 시스템 시간 (KST)
-  const year = currentDateObj.getUTCFullYear().toString(); // UTC 연도
-  const month = (currentDateObj.getUTCMonth() + 1).toString().padStart(2, '0'); // UTC 월
-
+  const currentDateObj = new Date();
   const currentDate = currentDateObj.toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-    timeZone: 'UTC' // UTC 기준으로 표시
+    timeZone: 'UTC'
   }).replace(/\./g, '.').slice(0, -1);
 
   const getUserNameFromToken = () => {
@@ -47,9 +46,9 @@ function Home() {
 
   const userName = getUserNameFromToken();
 
-  const fetchMonthlyQuest = useCallback(async () => {
+  const fetchMonthlyQuest = useCallback(async (year, month) => {
     try {
-      const response = await api.get('/calendar', { params: { year, month } });
+      const response = await api.get('/calendar', { params: { year, month: month.toString().padStart(2, '0') } });
       console.log('월별 quest 응답:', response.data);
       const parsedQuest = Object.fromEntries(
         Object.entries(response.data).map(([key, value]) => [parseDate(key).toISOString().split('T')[0], value])
@@ -59,11 +58,11 @@ function Home() {
       console.error('월별 quest 상태 오류:', error);
       setError('월별 quest 상태를 가져오지 못했습니다: ' + error.message);
     }
-  }, [year, month]);
+  }, []);
 
-  const fetchMonthlyRevenue = useCallback(async () => {
+  const fetchMonthlyRevenue = useCallback(async (year, month) => {
     try {
-      const response = await api.get('/calendar/detail', { params: { year, month } });
+      const response = await api.get('/calendar/detail', { params: { year, month: month.toString().padStart(2, '0') } });
       console.log('월별 상세 데이터 응답:', response.data);
       const parsedRevenue = response.data.map(item => ({
         ...item,
@@ -74,7 +73,7 @@ function Home() {
       console.error('월별 상세 데이터 오류:', error);
       setError('월별 상세 데이터를 가져오지 못했습니다: ' + error.message);
     }
-  }, [year, month]);
+  }, []);
 
   const fetchAssetData = useCallback(async () => {
     try {
@@ -106,26 +105,51 @@ function Home() {
     window.location.href = '/auth';
   };
 
+  const handlePrevMonth = () => {
+    setCurrentMonth(prev => {
+      if (prev === 1) {
+        setCurrentYear(prevYear => prevYear - 1);
+        return 12;
+      }
+      return prev - 1;
+    });
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth(prev => {
+      if (prev === 12) {
+        setCurrentYear(prevYear => prevYear + 1);
+        return 1;
+      }
+      return prev + 1;
+    });
+  };
+
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
-        await Promise.all([fetchMonthlyQuest(), fetchMonthlyRevenue(), fetchAssetData()]);
+        await Promise.all([fetchMonthlyQuest(currentYear, currentMonth), fetchMonthlyRevenue(currentYear, currentMonth), fetchAssetData()]);
       } catch (error) {
         setError('데이터를 가져오지 못했습니다: ' + error.message);
       }
       setLoading(false);
     };
     loadData();
-  }, [fetchMonthlyQuest, fetchMonthlyRevenue, fetchAssetData]);
+  }, [currentYear, currentMonth, fetchMonthlyQuest, fetchMonthlyRevenue, fetchAssetData]);
 
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
-  const daysInMonth = new Date(Date.UTC(year, month - 1, 0)).getUTCDate();
-  const calendarGrid = Array.from({ length: daysInMonth }, (_, i) => {
-    const day = i + 1;
-    const date = new Date(Date.UTC(year, month - 1, day));
+  const daysInMonth = new Date(Date.UTC(currentYear, currentMonth - 1, 0)).getUTCDate();
+  const firstDayOfMonth = new Date(Date.UTC(currentYear, currentMonth - 1, 1)).getUTCDay();
+
+  const calendarGrid = [];
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    calendarGrid.push({ day: null, status: 'empty' });
+  }
+  for (let i = 1; i <= daysInMonth; i++) {
+    const date = new Date(Date.UTC(currentYear, currentMonth - 1, i));
     const yearMonthDay = date.toISOString().split('T')[0];
     const quest = monthlyQuest?.[yearMonthDay] !== undefined ? monthlyQuest[yearMonthDay] : false;
 
@@ -140,15 +164,17 @@ function Home() {
       todayTotal: 0.0,
       quest: false,
     };
-    return {
-      day,
+    calendarGrid.push({
+      day: i,
       status: quest ? 'green' : 'red',
       data: revenueData,
-    };
-  });
+      isToday: yearMonthDay === currentDateObj.toISOString().split('T')[0],
+    });
+  }
 
   const handleDateClick = (day) => {
-    const date = new Date(Date.UTC(year, month - 1, day));
+    if (!day) return;
+    const date = new Date(Date.UTC(currentYear, currentMonth - 1, day));
     const yearMonthDay = date.toISOString().split('T')[0];
     const selected = monthlyRevenue?.find(r => parseDate(r.date).toISOString().split('T')[0] === yearMonthDay);
     setSelectedDate(selected || {
@@ -269,20 +295,39 @@ function Home() {
           <div className="assets-section">
             <h3>상세</h3>
             {selectedDate ? (
-              <>
-                <p>전체 자산: {selectedDate.todayTotal}원</p>
-                <p>수익: {selectedDate.addedRevenueMoney}원</p>
-                <p>저축: {selectedDate.addedSaveMoney}원</p>
-                <p>수익률: {selectedDate.addedRevenuePercent}%</p>
-                <p>일일퀘스트: {selectedDate.quest ? '완료' : '미완료'}</p>
-              </>
+              <div className="assets-details">
+                <div className="asset-item">
+                  <span className="asset-label">전체 자산</span>
+                  <span className="asset-value">{Number(selectedDate.todayTotal).toLocaleString()}원</span>
+                </div>
+                <div className="asset-item">
+                  <span className="asset-label">수익</span>
+                  <span className="asset-value">{Number(selectedDate.addedRevenueMoney).toLocaleString()}원</span>
+                </div>
+                <div className="asset-item">
+                  <span className="asset-label">저축</span>
+                  <span className="asset-value">{Number(selectedDate.addedSaveMoney).toLocaleString()}원</span>
+                </div>
+                <div className="asset-item">
+                  <span className="asset-label">수익률</span>
+                  <span className="asset-value">{Number(selectedDate.addedRevenuePercent).toFixed(2)}%</span>
+                </div>
+                <div className="asset-item">
+                  <span className="asset-label">일일퀘스트</span>
+                  <span className="asset-value">{selectedDate.quest ? '완료' : '미완료'}</span>
+                </div>
+              </div>
             ) : (
               <p>날짜를 선택해주세요.</p>
             )}
           </div>
 
           <div className="calendar-section">
-            <h2>{year}년 {month}월</h2>
+            <div className="calendar-header">
+              <button onClick={handlePrevMonth}>&lt;</button>
+              <h2>{currentYear}년 {currentMonth}월</h2>
+              <button onClick={handleNextMonth}>&gt;</button>
+            </div>
             <div className="calendar-grid">
               {['일', '월', '화', '수', '목', '금', '토'].map(day => (
                 <div key={day} className="calendar-day-header">
@@ -292,10 +337,10 @@ function Home() {
               {calendarGrid.map((item, index) => (
                 <div
                   key={index}
-                  className={`calendar-day ${item.status === 'gray' ? 'gray' : item.status}`}
+                  className={`calendar-day ${item.status === 'empty' ? 'empty' : item.status} ${item.isToday ? 'today' : ''}`}
                   onClick={() => handleDateClick(item.day)}
                 >
-                  {item.day}
+                  {item.day || ''}
                 </div>
               ))}
             </div>

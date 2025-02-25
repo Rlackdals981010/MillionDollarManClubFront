@@ -41,7 +41,7 @@
 
 .dashboard {
     display: grid;
-    gap: 20px;
+    gap: 40px;
     grid-template-areas:
         "challenge challenge calendar"
         "assets assets calendar"
@@ -54,13 +54,16 @@
 .challenge-section {
     grid-area: challenge;
     background-color: white;
-    padding: 20px;
+    padding: 20px 20px 0px 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    /* 고정 너비 */
+    max-width: 500px;
+    /* 반응형 방지 */
 }
 
 .challenge-user {
-
     flex-shrink: 0;
     /* 크기 줄어들지 않도록 고정 */
     margin-bottom: 2px;
@@ -154,14 +157,56 @@
 .assets-section {
     grid-area: assets;
     background-color: white;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: auto;
+    min-height: 100px;
+    width: 500px;
+    /* 고정 너비 유지 */
+    max-width: 500px;
 }
 
 .assets-section h3 {
     color: #333;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.assets-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* 항목 간 세로 간격 */
+}
+
+.asset-item {
+    display: flex;
+    justify-content: space-between;
+    /* 라벨과 값을 좌우로 배치 */
+    align-items: center;
+    /* 수직 중앙 정렬 */
+    padding: 5px 0;
+    /* 각 항목의 세로 여백 */
+}
+
+.asset-label {
+    color: #666;
+    /* 라벨 색상 (회색) */
+    font-size: 16px;
+    font-weight: normal;
+    white-space: nowrap;
+    /* 텍스트 줄바꿈 방지 */
+}
+
+.asset-value {
+    color: #333;
+    /* 값 색상 (검정) */
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    /* 텍스트 줄바꿈 방지 */
 }
 
 .assets-section ul {
@@ -175,6 +220,12 @@
 }
 
 .calendar-section {
+    width: 100%;
+    /* 섹션 전체 너비 활용 */
+    max-width: 800px;
+    /* 최대 너비 설정, 원하는 값으로 조정 가능 */
+    margin: 0 auto;
+    /* 가운데 정렬 */
     grid-area: calendar;
     background-color: white;
     padding: 20px;
@@ -190,24 +241,35 @@
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
+    gap: 10px;
+    /* 셀 간 간격 증가 */
+    padding: 10px;
+    /* 내부 여백 추가 */
+
 }
 
 .calendar-day-header {
     text-align: center;
     color: #666;
-    padding: 5px;
+    padding: 12px;
     font-weight: bold;
+    font-size: 20px;
 }
 
 .calendar-day {
-    text-align: center;
-    padding: 10px;
+    width: 40px;
+    /* 셀 크기 증가 (원래 40px → 60px) */
+    height: 40px;
+    /* 동일하게 증가 */
     border-radius: 50%;
-    cursor: pointer;
+    /* 완전한 원 유지 */
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    font-size: 18px;
+    /* 숫자 크기 증가 */
 }
 
 .calendar-day-content {
@@ -260,14 +322,46 @@
     width: 30px;
     height: 30px;
     border: 1px solid #ccc;
-    border-radius: 4px; /* 둥글게 */
+    border-radius: 4px;
+    /* 둥글게 */
     background-color: white;
     color: #333;
     font-size: 16px;
     cursor: pointer;
     padding: 0;
-  }
-  
-  .nav-button:hover {
+}
+
+.nav-button:hover {
     background-color: #f0f0f0;
-  }
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    /* 버튼과 제목을 양쪽 끝으로 배치 */
+    align-items: center;
+    /* 요소를 수직 중앙 정렬 */
+    margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    /* 기본 마진 제거 */
+}
+
+.calendar-header button {
+    font-size: 20px;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header button:hover {
+    background-color: #f5f5f5;
+}
