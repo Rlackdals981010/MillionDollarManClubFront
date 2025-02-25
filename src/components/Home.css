@@ -5,7 +5,7 @@
 }
 
 .sidebar {
-    width: 200px;
+    width: 100px;
     background-color: #f0f0f0;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -46,9 +46,10 @@
         "challenge challenge calendar"
         "assets assets calendar"
         "graph graph graph";
-    grid-template-columns: 1fr 1fr 300px;
-    grid-template-rows: auto auto 400px;
+    overflow: auto;
+    /* 내용 초과 시 스크롤 가능 */
 }
+
 
 .challenge-section {
     grid-area: challenge;
@@ -56,6 +57,42 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.challenge-user {
+    
+    flex-shrink: 0;
+    /* 크기 줄어들지 않도록 고정 */
+    margin-bottom: 2px;
+    /* 간격 최소화 (기존 5px에서 줄임, 필요 시 0으로 설정) */
+}
+
+.user-name {
+    color: #607081;
+    font-size: 16px;
+    /* 글씨 크기 키움 (기존 16px → 18px) */
+    margin-bottom: 0;
+    /* 하단 여백 제거 */
+    display: block;
+}
+
+.challenge-row {
+    display: flex;
+    font-size: 20px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    /* "100만불까지"와 "저축률" 사이 간격 */
+    width: 100%;
+    /* 전체 너비 사용 */
+    height: 70%;
+    /* 섹션 높이 사용 */
+}
+
+
+.challenge-header {
+    margin-bottom: 20px;
+    /* user-name과 challenge-content 사이 간격을 20px로 증가 (기존 15px에서 증가) */
 }
 
 .challenge-section h2 {
@@ -67,10 +104,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
+
+    /* 입력 필드와 버튼 간격 */
 }
 
 .challenge-stats span {
-    color: #666;
+    color: #000000;
+}
+
+.per-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;    
+    width: 100px;
+    font-size: 14px;
+    -webkit-appearance: none;
+    /* 웹킷 브라우저용 스피너 제거 */
+    -moz-appearance: textfield;
+    /* 파이어폭스용 스피너 제거 */
+}
+
+.per-input::-webkit-inner-spin-button,
+.per-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .action-button {
@@ -78,12 +136,19 @@
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 10px;    
     cursor: pointer;
 }
 
 .action-button:hover {
     background-color: #0056b3;
+}
+
+.daily-quest-value {
+    color: #333;
+    font-weight: bold;
+    margin-left: 10px;
+    /* 입력 필드 오른쪽 여백 */
 }
 
 .assets-section {

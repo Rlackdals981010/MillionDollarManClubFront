@@ -15,6 +15,7 @@ function Login() {
     }
 
     try {
+      localStorage.removeItem('bearerToken');
       console.log('로그인 요청 시작:', { name }); // 요청 데이터 로그
       const response = await api.post('/signin', { name }); // 백엔드가 객체를 기대한다고 가정
       console.log('로그인 응답:', response.data); // 응답 데이터 로그
@@ -34,7 +35,7 @@ function Login() {
 
   return (
     <div className="login-container">
-      <h1 className="app-title">백만불의 사나이들</h1>
+      <h1 className="app-title">백만🔥의 사나이들</h1>
       <div className="login-card">
         <h2>로그인</h2>
         <form onSubmit={handleLogin}>
