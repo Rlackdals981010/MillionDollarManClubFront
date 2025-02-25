@@ -23,6 +23,8 @@ function Home() {
   const [error, setError] = useState(null);
   const [currentYear, setCurrentYear] = useState(new Date().getUTCFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getUTCMonth() + 1);
+  const [inputMode, setInputMode] = useState('revenue'); // 'revenue' 또는 'save'
+  const [inputValue, setInputValue] = useState(''); // 입력 값
 
   const currentDateObj = new Date();
   const currentDate = currentDateObj.toLocaleDateString('ko-KR', {
@@ -123,6 +125,48 @@ function Home() {
       }
       return prev + 1;
     });
+  };
+
+  // 입력 값 변경 핸들러
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  // 토글 저장 API 호출
+  const handleToggleSubmit = async () => {
+    if (!inputValue || isNaN(inputValue) || parseFloat(inputValue) < 0) {
+      setError('유효한 금액을 입력해주세요 (0 이상의 숫자).');
+      return;
+    }
+    try {
+      if (inputMode === 'revenue') {
+        await api.post('/log/revenue', { dailyRevenue: parseFloat(inputValue) });
+      } else {
+        await api.post('/log/save-money', { dailySaveMoney: parseFloat(inputValue) });
+      }
+      setInputValue(''); // 입력 초기화
+      setError(null); // 에러 초기화
+      // 데이터 새로고침 (필요 시)
+      await fetchMonthlyRevenue(currentYear, currentMonth);
+    } catch (error) {
+      console.error(`${inputMode === 'revenue' ? '수익' : '저축'} 등록 오류:`, error);
+      setError(`${inputMode === 'revenue' ? '수익' : '저축'} 등록에 실패했습니다: ` + (error.response?.data?.message || error.message));
+    }
+  };
+
+  const handlePerChange = (e) => {
+    setPer(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    if (e.key === 'Enter' || e.type === 'click') {
+      const perValue = parseInt(per, 10);
+      if (isNaN(perValue) || perValue < 0) {
+        setError('유효한 per 값을 입력해주세요 (0 이상의 숫자).');
+        return;
+      }
+      fetchDailyQuest(perValue);
+    }
   };
 
   useEffect(() => {
@@ -236,29 +280,14 @@ function Home() {
     },
   };
 
-  const handlePerChange = (e) => {
-    setPer(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    if (e.key === 'Enter' || e.type === 'click') {
-      const perValue = parseInt(per, 10);
-      if (isNaN(perValue) || perValue < 0) {
-        setError('유효한 per 값을 입력해주세요 (0 이상의 숫자).');
-        return;
-      }
-      fetchDailyQuest(perValue);
-    }
-  };
-
   return (
     <div className="home-container">
       <aside className="sidebar">
         <ul>
           <li>🏠 홈</li>
-          <li>👤 나 설정</li>
-          <li>💰 투자</li>
-          <li>💸 자산 관리</li>
+          <li>👤 실시간차트</li>
+          <li>💰 뉴스/라이브</li>
+          <li>💸 자산설정</li>
           <li onClick={handleLogout} style={{ cursor: 'pointer', color: 'red' }}>로그아웃</li>
         </ul>
       </aside>
@@ -293,9 +322,15 @@ function Home() {
           </div>
 
           <div className="assets-section">
-            <h3>상세</h3>
             {selectedDate ? (
               <div className="assets-details">
+                <div className="date-display">
+                  <span className="date-value">{new Date(selectedDate.date).toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  }).replace(/\./g, '.').slice(0, -1)}</span>
+                </div>
                 <div className="asset-item">
                   <span className="asset-label">전체 자산</span>
                   <span className="asset-value">{Number(selectedDate.todayTotal).toLocaleString()}원</span>
@@ -315,6 +350,31 @@ function Home() {
                 <div className="asset-item">
                   <span className="asset-label">일일퀘스트</span>
                   <span className="asset-value">{selectedDate.quest ? '완료' : '미완료'}</span>
+                </div>
+                <hr className="divider" /> {/* 구분선 유지 */}
+                <div className="input-section">
+                  <div className="toggle-row">
+                    <button
+                      className={`toggle-button ${inputMode === 'revenue' ? 'active' : ''}`}
+                      onClick={() => setInputMode('revenue')}
+                    >
+                      수익
+                    </button>
+                    <button
+                      className={`toggle-button ${inputMode === 'save' ? 'active' : ''}`}
+                      onClick={() => setInputMode('save')}
+                    >
+                      저축
+                    </button>
+                    <input
+                      type="number"
+                      value={inputValue}
+                      onChange={handleInputChange}
+                      placeholder={inputMode === 'revenue' ? '수익 입력' : '저축 입력'}
+                      className="toggle-input"
+                    />
+                    <button className="save-button" onClick={handleToggleSubmit}>저장</button>
+                  </div>
                 </div>
               </div>
             ) : (
