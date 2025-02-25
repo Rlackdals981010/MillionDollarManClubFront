@@ -1,0 +1,170 @@
+.home-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px 0;
+    color: #333;
+    cursor: pointer;
+}
+
+.sidebar li:hover {
+    color: #007bff;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.dashboard {
+    display: grid;
+    gap: 20px;
+    grid-template-areas:
+        "challenge challenge calendar"
+        "assets assets calendar"
+        "graph graph graph";
+    grid-template-columns: 1fr 1fr 300px;
+    grid-template-rows: auto auto 400px;
+}
+
+.challenge-section {
+    grid-area: challenge;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.challenge-section h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.challenge-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.challenge-stats span {
+    color: #666;
+}
+
+.action-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.action-button:hover {
+    background-color: #0056b3;
+}
+
+.assets-section {
+    grid-area: assets;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.assets-section h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.assets-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.assets-section li {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.calendar-section {
+    grid-area: calendar;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-section h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day-header {
+    text-align: center;
+    color: #666;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.calendar-day.red {
+    background-color: #ff4444;
+    color: white;
+}
+
+.calendar-day.green {
+    background-color: #00c851;
+    color: white;
+}
+
+.calendar-day.gray {
+    background-color: #ccc;
+    color: #666;
+}
+
+.graph-section {
+    grid-area: graph;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+    height: 300px;
+}
