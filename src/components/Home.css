@@ -60,7 +60,7 @@
 }
 
 .challenge-user {
-    
+
     flex-shrink: 0;
     /* 크기 줄어들지 않도록 고정 */
     margin-bottom: 2px;
@@ -116,7 +116,7 @@
 .per-input {
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 10px;    
+    border-radius: 10px;
     width: 100px;
     font-size: 14px;
     -webkit-appearance: none;
@@ -136,7 +136,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 10px;    
+    border-radius: 10px;
     cursor: pointer;
 }
 
@@ -205,15 +205,37 @@
     padding: 10px;
     border-radius: 50%;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar-day-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.day-number {
+    font-size: 16px;
+    /* 날짜 숫자 크기 유지 */
+    font-weight: bold;
+}
+
+.day-weekday {
+    font-size: 12px;
+    /* 요일 크기 (작게 설정) */
+    color: #666;
+    /* 요일 색상 */
 }
 
 .calendar-day.red {
-    background-color: #ff4444;
+    background-color: #F28282;
     color: white;
 }
 
 .calendar-day.green {
-    background-color: #00c851;
+    background-color: #7ED789;
     color: white;
 }
 
@@ -233,3 +255,19 @@
 .chart-container {
     height: 300px;
 }
+
+.nav-button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* 둥글게 */
+    background-color: white;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .nav-button:hover {
+    background-color: #f0f0f0;
+  }
