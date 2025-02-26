@@ -22,7 +22,7 @@ function Login() {
       const token = response.data.data.bearerToken; // 중첩된 data 구조에서 bearerToken 추출
       localStorage.setItem('bearerToken', token); // Bearer 접두사 포함 토큰 저장
       alert('로그인 성공!');
-      navigate('/'); // 로그인 성공 시 홈으로 리다이렉트
+      navigate('/home'); // 로그인 성공 시 홈으로 리다이렉트
     } catch (error) {
       console.error('로그인 실패:', {
         message: error.message,

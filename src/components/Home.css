@@ -121,7 +121,7 @@
 .per-input {
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 12px;
     width: 100px;
     font-size: 14px;
     -webkit-appearance: none;
@@ -141,7 +141,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
 }
 
@@ -265,7 +265,7 @@
 }
 
 .calendar-day-header {
-    text-align: center;
+    text-align: left;
     color: #666;
     padding: 12px;
     font-weight: bold;
@@ -434,7 +434,7 @@
     color: white;
     border: none;
     padding: 6px 14px;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     font-size: 14px;
 }
@@ -455,7 +455,7 @@
 .toggle-button {
     padding: 5px 12px;
     border: 1px solid #ffffff; /* 테두리 색상을 흰색으로 설정 */
-    border-radius: 15px;
+    border-radius: 12px;
     background-color: white;
     color: #D0D6DC; /* 기본 글씨 색상 유지 (회색) */
     cursor: pointer;
@@ -478,7 +478,7 @@
 .toggle-input {
     padding: 5px; /* 패딩을 6px에서 5px로 줄임 */
     border: 1px solid #ccc;
-    border-radius: 15px; /* 테두리를 더 둥글게 (기존 10px → 15px) */
+    border-radius: 12px; /* 테두리를 더 둥글게 (기존 10px → 15px) */
     width: 120px; /* 너비를 150px에서 120px로 줄임 */
     font-size: 14px;
     -webkit-appearance: none;
@@ -496,7 +496,7 @@
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 15px; /* 테두리를 더 둥글게 (기존 10px → 15px) */
+    border-radius: 12px; /* 테두리를 더 둥글게 (기존 10px → 15px) */
     cursor: pointer;
     font-size: 14px;
 }

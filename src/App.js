@@ -8,8 +8,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} /> {/* 로그인 페이지 */}
-        <Route path="/" element={<Home />} /> {/* 메인 페이지 */}
+        <Route path="/" element={<Login />} /> {/* 로그인 페이지 */}
+        <Route path="/home" element={<Home />} /> {/* 메인 페이지 */}
       </Routes>
     </Router>
   );

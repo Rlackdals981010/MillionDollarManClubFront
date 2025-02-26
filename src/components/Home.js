@@ -4,13 +4,12 @@ import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { jwtDecode } from 'jwt-decode';
 import './Home.css';
+import moment from 'moment-timezone'; // moment-timezone 임포트
 
-// Date 객체로 변환하는 헬퍼 함수
-const parseDate = (date) => {
-  if (date instanceof Date) return date;
-  if (typeof date === 'string') return new Date(date);
-  return new Date();
-};
+// moment를 Asia/Seoul 시간대로 설정
+moment.tz.setDefault('Asia/Seoul');
+
+// Date 객체로 변환하는 헬퍼 함수 (Asia/Seoul 시간대 적용)
 
 function Home() {
   const [monthlyQuest, setMonthlyQuest] = useState(null);
@@ -21,18 +20,13 @@ function Home() {
   const [dailyQuest, setDailyQuest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentYear, setCurrentYear] = useState(new Date().getUTCFullYear());
-  const [currentMonth, setCurrentMonth] = useState(new Date().getUTCMonth() + 1);
+  const [currentYear, setCurrentYear] = useState(moment().year()); // Asia/Seoul 기준
+  const [currentMonth, setCurrentMonth] = useState(moment().month() + 1); // Asia/Seoul 기준 (0~11 → 1~12)
   const [inputMode, setInputMode] = useState('revenue'); // 'revenue' 또는 'save'
   const [inputValue, setInputValue] = useState(''); // 입력 값
 
-  const currentDateObj = new Date();
-  const currentDate = currentDateObj.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    timeZone: 'UTC'
-  }).replace(/\./g, '.').slice(0, -1);
+  const currentDateObj = moment().toDate(); // Asia/Seoul 기준 Date 객체
+  const currentDate = moment(currentDateObj).format('YYYY.MM.DD'); // 한국 형식으로 포매팅
 
   const getUserNameFromToken = () => {
     const token = localStorage.getItem('bearerToken');
@@ -41,7 +35,6 @@ function Home() {
       const decoded = jwtDecode(token);
       return decoded.name || decoded.sub || '사용자';
     } catch (error) {
-      console.error('토큰 디코딩 오류:', error);
       return '사용자';
     }
   };
@@ -51,13 +44,14 @@ function Home() {
   const fetchMonthlyQuest = useCallback(async (year, month) => {
     try {
       const response = await api.get('/calendar', { params: { year, month: month.toString().padStart(2, '0') } });
-      console.log('월별 quest 응답:', response.data);
       const parsedQuest = Object.fromEntries(
-        Object.entries(response.data).map(([key, value]) => [parseDate(key).toISOString().split('T')[0], value])
+        Object.entries(response.data).map(([key, value]) => [
+          moment(key).format('YYYY-MM-DD'), // Asia/Seoul로 파싱 후 포매팅
+          value
+        ])
       );
       setMonthlyQuest(parsedQuest);
     } catch (error) {
-      console.error('월별 quest 상태 오류:', error);
       setError('월별 quest 상태를 가져오지 못했습니다: ' + error.message);
     }
   }, []);
@@ -65,38 +59,55 @@ function Home() {
   const fetchMonthlyRevenue = useCallback(async (year, month) => {
     try {
       const response = await api.get('/calendar/detail', { params: { year, month: month.toString().padStart(2, '0') } });
-      console.log('월별 상세 데이터 응답:', response.data);
       const parsedRevenue = response.data.map(item => ({
         ...item,
-        date: parseDate(item.date),
+        date: moment(item.date).toDate(), // Asia/Seoul로 파싱된 Date 객체
       }));
       setMonthlyRevenue(parsedRevenue);
     } catch (error) {
-      console.error('월별 상세 데이터 오류:', error);
       setError('월별 상세 데이터를 가져오지 못했습니다: ' + error.message);
     }
   }, []);
 
   const fetchAssetData = useCallback(async () => {
     try {
-      const response = await api.get('/asset');
-      console.log('자산 그래프 응답:', response.data);
-      const data = Array.isArray(response.data.data) ? response.data.data : (response.data.data || []);
-      setAssetData(data);
+      const token = localStorage.getItem('bearerToken');
+      if (!token) {
+        setError('인증 토큰이 필요합니다.');
+        setAssetData([]); // 기본 빈 배열 설정
+        return;
+      }
+
+      const response = await api.get('/asset', {
+        headers: { Authorization: `Bearer ${token}` }, // 인증 헤더 추가
+      });
+
+      // API 응답 구조 점검
+      let assets = [];
+      if (response.data && response.data.data && Array.isArray(response.data.data.assets)) {
+        assets = response.data.data.assets; // 중첩된 data.assets 접근
+      } else if (Array.isArray(response.data.assets)) {
+        assets = response.data.assets; // 직접 assets 접근
+      } else {
+        assets = response.data.assets || []; // 기본값 설정
+      }
+
+      setAssetData(assets.map(item => ({
+        ...item,
+        date: moment(item.date).toDate(), // Asia/Seoul로 파싱된 Date 객체
+      })));
     } catch (error) {
-      console.error('자산 그래프 오류:', error);
       setError('자산 데이터를 가져오지 못했습니다: ' + (error.response ? error.response.data : error.message));
+      setAssetData([]); // API 호출 실패 시 빈 배열 설정
     }
   }, []);
 
   const fetchDailyQuest = async (perValue) => {
     try {
       const response = await api.post('/money/upcoming', { per: perValue });
-      console.log('Daily Quest 응답:', response.data);
       setDailyQuest(response.data.data.dailyQuest);
       setPer('');
     } catch (error) {
-      console.error('Daily Quest 오류:', error);
       setError('일퀘 데이터를 가져오지 못했습니다: ' + (error.response?.data?.message || error.message));
       setDailyQuest(null);
     }
@@ -149,7 +160,6 @@ function Home() {
       // 데이터 새로고침 (필요 시)
       await fetchMonthlyRevenue(currentYear, currentMonth);
     } catch (error) {
-      console.error(`${inputMode === 'revenue' ? '수익' : '저축'} 등록 오류:`, error);
       setError(`${inputMode === 'revenue' ? '수익' : '저축'} 등록에 실패했습니다: ` + (error.response?.data?.message || error.message));
     }
   };
@@ -185,23 +195,24 @@ function Home() {
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
-  const daysInMonth = new Date(Date.UTC(currentYear, currentMonth - 1, 0)).getUTCDate();
-  const firstDayOfMonth = new Date(Date.UTC(currentYear, currentMonth - 1, 1)).getUTCDay();
+  // 달력 생성 (Asia/Seoul 기준)
+  const daysInMonth = moment([currentYear, currentMonth - 1]).daysInMonth(); // Asia/Seoul 기준
+  const firstDayOfMonth = moment([currentYear, currentMonth - 1, 1]).day(); // Asia/Seoul 기준
 
   const calendarGrid = [];
   for (let i = 0; i < firstDayOfMonth; i++) {
     calendarGrid.push({ day: null, status: 'empty' });
   }
   for (let i = 1; i <= daysInMonth; i++) {
-    const date = new Date(Date.UTC(currentYear, currentMonth - 1, i));
-    const yearMonthDay = date.toISOString().split('T')[0];
+    const date = moment([currentYear, currentMonth - 1, i]).toDate(); // Asia/Seoul 기준 Date 객체
+    const yearMonthDay = moment(date).format('YYYY-MM-DD'); // Asia/Seoul로 포매팅
     const quest = monthlyQuest?.[yearMonthDay] !== undefined ? monthlyQuest[yearMonthDay] : false;
 
     const revenueData = monthlyRevenue?.find(r => {
-      const revenueDate = parseDate(r.date).toISOString().split('T')[0];
+      const revenueDate = moment(r.date).format('YYYY-MM-DD'); // Asia/Seoul로 파싱 후 포매팅
       return revenueDate === yearMonthDay;
     }) || {
-      date: new Date(yearMonthDay),
+      date: date,
       addedRevenueMoney: 0.0,
       addedSaveMoney: 0.0,
       addedRevenuePercent: 0.0,
@@ -212,17 +223,17 @@ function Home() {
       day: i,
       status: quest ? 'green' : 'red',
       data: revenueData,
-      isToday: yearMonthDay === currentDateObj.toISOString().split('T')[0],
+      isToday: yearMonthDay === moment(currentDateObj).format('YYYY-MM-DD'),
     });
   }
 
   const handleDateClick = (day) => {
     if (!day) return;
-    const date = new Date(Date.UTC(currentYear, currentMonth - 1, day));
-    const yearMonthDay = date.toISOString().split('T')[0];
-    const selected = monthlyRevenue?.find(r => parseDate(r.date).toISOString().split('T')[0] === yearMonthDay);
+    const date = moment([currentYear, currentMonth - 1, day]).toDate(); // Asia/Seoul 기준
+    const yearMonthDay = moment(date).format('YYYY-MM-DD');
+    const selected = monthlyRevenue?.find(r => moment(r.date).format('YYYY-MM-DD') === yearMonthDay);
     setSelectedDate(selected || {
-      date: new Date(yearMonthDay),
+      date: date,
       addedRevenueMoney: 0.0,
       addedSaveMoney: 0.0,
       addedRevenuePercent: 0.0,
@@ -231,54 +242,131 @@ function Home() {
     });
   };
 
-  const chartData = {
-    labels: (Array.isArray(assetData) ? assetData : []).map(item => parseDate(item.date).toISOString().split('T')[0]) || [],
-    datasets: [
-      {
-        label: '나',
-        data: (Array.isArray(assetData) ? assetData.filter(item => item.isCurrentUser).map(item => item.todayTotal) : []) || [],
-        borderColor: 'blue',
-        borderWidth: 2,
-        fill: false,
-      },
-      {
-        label: '황',
-        data: (Array.isArray(assetData) ? assetData.filter(item => item.name === '황').map(item => item.todayTotal) : []) || [],
-        borderColor: 'orange',
-        borderWidth: 2,
-        borderDash: [5, 5],
-        fill: false,
-      },
-      {
-        label: '오',
-        data: (Array.isArray(assetData) ? assetData.filter(item => item.name === '오').map(item => item.todayTotal) : []) || [],
-        borderColor: 'green',
-        borderWidth: 2,
-        borderDash: [5, 5],
-        fill: false,
-      },
-      {
-        label: '흰',
-        data: (Array.isArray(assetData) ? assetData.filter(item => item.name === '흰').map(item => item.todayTotal) : []) || [],
-        borderColor: 'gray',
-        borderWidth: 2,
-        borderDash: [5, 5],
-        fill: false,
-      },
-    ],
+  // 자산 그래프 데이터 생성 (Asia/Seoul 기준)
+  // 자산 그래프 데이터 생성 (Asia/Seoul 기준)
+  const chartData = assetData && assetData.length > 0 ? (() => {
+    // 1. 고유한 날짜 배열 생성 및 정렬 (과거 -> 최신)
+    const uniqueDates = [...new Set(assetData.map(item => moment(item.date).format('YYYY-MM-DD')))]
+      .sort((a, b) => moment(a).valueOf() - moment(b).valueOf()); // 날짜 오름차순 정렬
+
+    // 2. 사용자별 데이터 매핑
+    const getUserData = (name, isCurrentUser) => {
+      return uniqueDates.map(date => {
+        const entry = assetData.find(item =>
+          moment(item.date).format('YYYY-MM-DD') === date &&
+          item.name === name &&
+          item.currentUser === isCurrentUser
+        );
+        return entry ? entry.todayTotal || 0 : 0; // 데이터가 없으면 0 반환
+      });
+    };
+
+    return {
+      labels: uniqueDates, // 정렬된 고유 날짜를 레이블로 사용
+      datasets: [
+        {
+          label: '김창민',
+          data: getUserData('김창민', true),
+          borderColor: 'blue',
+          borderWidth: 2,
+          fill: false,
+          spanGaps: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+        {
+          label: '배민석',
+          data: getUserData('배민석', false),
+          borderColor: 'orange',
+          borderWidth: 2,
+          borderDash: [5, 5],
+          fill: false,
+          spanGaps: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+        {
+          label: '조영채',
+          data: getUserData('조영채', false),
+          borderColor: 'green',
+          borderWidth: 2,
+          borderDash: [5, 5],
+          fill: false,
+          spanGaps: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+      ],
+    };
+  })() : {
+    labels: [],
+    datasets: [],
   };
 
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
-      y: { beginAtZero: true, ticks: { color: '#666' } },
-      x: { ticks: { color: '#666' } },
+      y: {
+        beginAtZero: true,
+        min: 0, // y 축 최소값 0원
+        max: 10000000, // y 축 최대값 5천만 원
+        ticks: {
+          color: '#666',
+          stepSize: 1000000, // 백만 원 간격으로 눈금 설정
+          callback: function (value) {
+            return value.toLocaleString() + '원'; // 숫자에 천 단위 구분자 추가
+          },
+        },
+        title: { display: true, text: '자산 (원)', color: '#666' },
+      },
+      x: {
+        ticks: {
+          display: true, // x 축 틱 라벨(날짜) 표시 활성화
+          color: '#666',
+          autoSkip: true,
+          maxRotation: 30,
+          minRotation: 30,
+          callback: function (value, index, values) {
+            return chartData.labels[index]; // 백엔드 제공 날짜 그대로 표시
+          },
+        },
+        title: { display: true, text: '날짜', color: '#666' },
+      },
     },
     plugins: {
-      legend: { position: 'top', labels: { color: '#666' } },
+      legend: {
+        position: 'top',
+        labels: { color: '#666' },
+      },
+      title: {
+        display: true,
+        text: '자산 변동 그래프',
+        color: '#333',
+        font: { size: 16, weight: 'bold' },
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          label: function (context) {
+            const label = context.dataset.label || '';
+            const value = context.parsed.y || 0;
+            const date = chartData.labels[context.dataIndex] || '';
+            return `${label}: ${value.toLocaleString()}원 (${date})`;
+          },
+        },
+      },
+    },
+    elements: {
+      line: {
+        tension: 0, // 선을 직선으로 유지
+      },
     },
   };
+
+  console.log('Asset Data:', assetData);
+  console.log('Chart Data:', chartData);
 
   return (
     <div className="home-container">
@@ -325,11 +413,7 @@ function Home() {
             {selectedDate ? (
               <div className="assets-details">
                 <div className="date-display">
-                  <span className="date-value">{new Date(selectedDate.date).toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  }).replace(/\./g, '.').slice(0, -1)}</span>
+                  <span className="date-value">{moment(selectedDate.date).format('YYYY.MM.DD')}</span>
                 </div>
                 <div className="asset-item">
                   <span className="asset-label">전체 자산</span>
@@ -387,6 +471,7 @@ function Home() {
               <button onClick={handlePrevMonth}>&lt;</button>
               <h2>{currentYear}년 {currentMonth}월</h2>
               <button onClick={handleNextMonth}>&gt;</button>
+
             </div>
             <div className="calendar-grid">
               {['일', '월', '화', '수', '목', '금', '토'].map(day => (
