@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Home from "./components/Home"
+import Revenue from "./components/RevenueLog"
 
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} /> {/* 로그인 페이지 */}
         <Route path="/home" element={<Home />} /> {/* 메인 페이지 */}
+        <Route path="/revenue" element={<Revenue />} /> {/* 메인 페이지 */}
       </Routes>
     </Router>
   );

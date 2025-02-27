@@ -1,506 +1,443 @@
 .home-container {
     display: flex;
-    height: 100vh;
-    background-color: #f5f5f5;
+    min-height: 100vh;
+    background: #F5F6F6;
+    font-family: Pretendard, -apple-system, system-ui, sans-serif;
 }
 
 .sidebar {
-    width: 100px;
-    background-color: #f0f0f0;
-    padding: 30px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    width: 165px;
+    background: #FFF;
+    padding: 50px 20px;
+    box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.08);
+    position: fixed;
+    height: 100vh;
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar li {
-    padding: 10px 0;
-    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    margin-bottom: 32px;
+    color: #607081;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
 }
 
-.sidebar li:hover {
-    color: #007bff;
+.sidebar li:first-child {
+    color: #0A83FF;
 }
 
 .main-content {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+    margin-left: 165px;
+    padding: 72px;
+    width: calc(100% - 165px);
+    max-width: 1920px;
+    margin: 0 auto;
 }
 
 .header {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 20px;
+    color: #1E2429;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 24px;
 }
 
 .dashboard {
-    display: grid;
-    gap: 30px;
-    grid-template-areas:
-        "challenge challenge calendar"
-        "assets assets calendar"
-        "graph graph graph";
-    grid-template-columns: 400px 400px 1fr;
-    /* calendar-section을 유연한 너비로 설정 */
-    overflow: auto;
-    /* 내용 초과 시 스크롤 가능 */
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 1425px;
+    margin: 0 auto;
 }
 
+.left-column {
+    display: flex;
+    gap: 60px;
+}
+
+.challenge-assets-column {
+    width: 765px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
 
 .challenge-section {
-    grid-area: challenge;
-    background-color: white;
-    padding: 20px 20px 0px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 790px;
-    /* 고정 너비 */
-    max-width: 790px;
-    /* 반응형 방지 */
+    background: #FFF;
+    border-radius: 12px;
+    padding: 16px 24px;
+    height: 100px;
 }
 
 .challenge-user {
-    flex-shrink: 0;
-    /* 크기 줄어들지 않도록 고정 */
-    margin-bottom: 2px;
-    /* 간격 최소화 (기존 5px에서 줄임, 필요 시 0으로 설정) */
-}
-
-.user-name {
     color: #607081;
-    font-size: 16px;
-    /* 글씨 크기 키움 (기존 16px → 18px) */
-    margin-bottom: 0;
-    /* 하단 여백 제거 */
-    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .challenge-row {
     display: flex;
-    font-size: 20px;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    /* "100만불까지"와 "저축률" 사이 간격 */
-    width: 100%;
-    /* 전체 너비 사용 */
-    height: 70%;
-    /* 섹션 높이 사용 */
 }
 
-
-.challenge-header {
-    margin-bottom: 20px;
-    /* user-name과 challenge-content 사이 간격을 20px로 증가 (기존 15px에서 증가) */
+.challenge-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.challenge-section h2 {
-    color: #333;
-    margin-bottom: 15px;
+.challenge-content span:first-child {
+    color: #1E2429;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.result-days {
+    color: #0A83FF;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .challenge-stats {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-
-    /* 입력 필드와 버튼 간격 */
+    gap: 12px;
 }
 
 .challenge-stats span {
-    color: #000000;
+    color: #1E2429;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .per-input {
+    width: 120px;
+    height: 36px;
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    width: 100px;
+    border: 1px solid #D0D6DC;
+    border-radius: 8px;
     font-size: 14px;
-    -webkit-appearance: none;
-    /* 웹킷 브라우저용 스피너 제거 */
-    -moz-appearance: textfield;
-    /* 파이어폭스용 스피너 제거 */
-}
-
-.per-input::-webkit-inner-spin-button,
-.per-input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    color: #96A3B1;
 }
 
 .action-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 16px;
+    height: 36px;
+    padding: 6px 12px;
+    background: #0A83FF;
     border-radius: 12px;
+    color: #F5F6F6;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
     cursor: pointer;
 }
 
-.action-button:hover {
-    background-color: #0056b3;
-}
-
-.daily-quest-value {
-    color: #333;
-    font-weight: bold;
-    margin-left: 10px;
-    /* 입력 필드 오른쪽 여백 */
-}
-
 .assets-section {
-    grid-area: assets;
-    background-color: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: auto;
-    min-height: 100px;
-    width: 800px;
-    /* 고정 너비 */
-    max-width: 800px;
-    /* 반응형 방지 */
-}
-
-.assets-section h3 {
-    color: #333;
-    margin-bottom: 10px;
-    font-size: 20px;
-    font-weight: bold;
+    background: #FFF;
+    border-radius: 12px;
+    padding: 24px 32px;
+    height: 350px;
 }
 
 .assets-details {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    /* 항목 간 세로 간격 */
+    gap: 8px;
 }
 
 .asset-item {
     display: flex;
     justify-content: space-between;
-    /* 라벨과 값을 좌우로 배치 */
     align-items: center;
-    /* 수직 중앙 정렬 */
-    padding: 5px 0;
-    /* 각 항목의 세로 여백 */
+    padding: 4px 0;
 }
 
 .asset-label {
-    color: #666;
-    /* 라벨 색상 (회색) */
-    font-size: 16px;
-    font-weight: normal;
-    white-space: nowrap;
-    /* 텍스트 줄바꿈 방지 */
+    color: #607081;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .asset-value {
-    color: #333;
-    /* 값 색상 (검정) */
+    color: #000;
     font-size: 16px;
-    font-weight: bold;
-    white-space: nowrap;
-    /* 텍스트 줄바꿈 방지 */
+    font-weight: 600;
 }
 
-.assets-section ul {
-    list-style: none;
-    padding: 0;
+.divider {
+    margin: 8px 0;
+    border: 1px solid #D0D6DC;
 }
 
-/* 새로운 날짜 표시 스타일 */
-.date-display {
-    margin-bottom: 10px;
-    /* 상세 데이터와의 간격 */
-    text-align: center;
-    /* 중앙 정렬 */
-}
-
-.date-value {
-    color: #333;
-    font-size: 18px;
-    font-weight: bold;
-    white-space: nowrap;
-    /* 텍스트 줄바꿈 방지 */
-}
-
-.assets-section li {
-    color: #666;
-    margin-bottom: 10px;
+.input-section {
+    margin-top: 8px;
 }
 
 .calendar-section {
-    width: 90%;
-    /* 반응형으로 너비 100% 설정 */
-    margin: 0px;
-    grid-area: calendar;
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 440px;
+    /* calendar-day-header의 너비(7 * 40px + 6 * 24px = 520px) + 패딩(40px * 2) + 40px 여백 */
+    background: #FFF;
+    border-radius: 12px;
+    padding: 32px 40px;
+    /* 패딩을 유지하면서 오른쪽 끝 40px 여백 계산 */
 }
 
-.calendar-section h2 {
-    color: #333;
-    margin-bottom: 15px;
+.calendar-section-rows-5 {
+    height: 500px;
+}
+
+.calendar-section-rows-6 {
+    height: 500px;
+}
+
+.calendar-header {
+    width: 440px; /* 캘린더의 전체 폭 유지 */
+    display: flex;
+    justify-content: space-between; /* 좌측(월/년도, 화살표)와 우측(버튼)을 분배 */
+    align-items: center; /* 수직 중앙 정렬 */
+    padding-bottom: 24px;
+    border-bottom: 1px solid #D0D6DC;
+}
+
+.calendar-header h2 {
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.calendar-controls {
+    display: flex;
+    border: 1px solid #D0D6DC;
+    border-radius: 4px;
+}
+
+.calendar-controls button {
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .calendar-grid {
+    width: 520px;
+    /* calendar-day-header의 너비(7 * 40px + 6 * 24px)와 동일 */
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    /* 셀 간 간격 증가 */
-    padding: 10px;
-    /* 내부 여백 추가 */
-
+    grid-template-columns: repeat(7, 40px);
+    gap: 24px;
+    margin-top: 24px;
 }
 
 .calendar-day-header {
-    text-align: left;
-    color: #666;
-    padding: 12px;
-    font-weight: bold;
-    font-size: 20px;
+    width: 40px;
+    /* 각 헤더 셀의 너비를 명시적으로 설정 */
+    color: #607081;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
 }
 
 .calendar-day {
     width: 40px;
-    /* 셀 크기 증가 (원래 40px → 60px) */
     height: 40px;
-    /* 동일하게 증가 */
-    border-radius: 50%;
-    /* 완전한 원 유지 */
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    background-color: #f0f0f0;
-    font-size: 18px;
-    /* 숫자 크기 증가 */
-}
-
-.calendar-day-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.day-number {
-    font-size: 16px;
-    /* 날짜 숫자 크기 유지 */
-    font-weight: bold;
-}
-
-.day-weekday {
-    font-size: 12px;
-    /* 요일 크기 (작게 설정) */
-    color: #666;
-    /* 요일 색상 */
 }
 
 .calendar-day.red {
-    background-color: #F28282;
-    color: white;
+    background: #F28282;
+    color: #FFF;
 }
 
 .calendar-day.green {
-    background-color: #7ED789;
-    color: white;
+    background: #7ED789;
+    color: #FFF;
 }
 
-.calendar-day.gray {
-    background-color: #ccc;
-    color: #666;
+.calendar-day.empty {
+    color: #D0D6DC;
 }
 
 .graph-section {
-    grid-area: graph;
-    background-color: white;
-    padding: 20px;
+    width: 1425px;
+    background: #FFF;
+    border-radius: 12px;
+    padding: 24px 32px;
+    height: 462px;
+}
+
+.graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.graph-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.legend-color {
+    width: 23px;
+    height: 5px;
+}
+
+.legend-label {
+    color: #000;
+    font-size: 14px;
+}
+
+.graph-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.graph-controls button {
+    padding: 6px 8px;
+    border-radius: 4px;
+    color: #000;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.graph-controls button.active {
+    background: #0A83FF;
+    color: #FFF;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chart-container {
-    height: 300px;
+    height: 334px;
+    width: 100%;
 }
 
-.nav-button {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    /* 둥글게 */
-    background-color: white;
-    color: #333;
-    font-size: 16px;
+.toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #D0D6DC;
+}
+
+.toggle-button {
+    color: #D0D6DC;
+    font-size: 20px;
+    font-weight: 600;
+    background: none;
+    border: none;
     cursor: pointer;
     padding: 0;
 }
 
-.nav-button:hover {
-    background-color: #f0f0f0;
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    /* 버튼과 제목을 양쪽 끝으로 배치 */
-    align-items: center;
-    /* 요소를 수직 중앙 정렬 */
-    margin-bottom: 20px;
-}
-
-.calendar-header h2 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-    /* 기본 마진 제거 */
-}
-
-.calendar-header button {
-    font-size: 20px;
-    padding: 8px 16px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.calendar-header button:hover {
-    background-color: #f5f5f5;
-}
-
-/* 구분선 스타일 */
-.divider {
-    border: 1px solid #ddd;
-    margin: 15px 0;
-}
-
-/* 입력 섹션 스타일 */
-.input-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.input-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.input-label {
-    color: #666;
-    font-size: 16px;
-    font-weight: normal;
-    white-space: nowrap;
-    flex: 1;
-}
-
-.revenue-input,
-.save-money-input {
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 150px;
-    font-size: 14px;
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
-}
-
-.revenue-input::-webkit-inner-spin-button,
-.revenue-input::-webkit-outer-spin-button,
-.save-money-input::-webkit-inner-spin-button,
-.save-money-input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.save-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.save-button:hover {
-    background-color: #0056b3;
-}
-
-/* 토글 버튼 및 입력 섹션 스타일 */
-/* 토글 버튼 및 입력 섹션 스타일 */
-.toggle-row {
-    display: flex;
-    justify-content: flex-start; /* 요소를 왼쪽에서 시작하도록 설정 */
-    align-items: center;
-    gap: 5px; /* 간격을 10px에서 5px로 줄임 */
-}
-
-.toggle-button {
-    padding: 5px 12px;
-    border: 1px solid #ffffff; /* 테두리 색상을 흰색으로 설정 */
-    border-radius: 12px;
-    background-color: white;
-    color: #D0D6DC; /* 기본 글씨 색상 유지 (회색) */
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold; /* 텍스트를 볼드체로 설정 */
-    transition: background-color 0.3s, color 0.3s;
-}
-
 .toggle-button.active {
-    font-weight: bold; /* 텍스트를 볼드체로 설정 */
-    background-color: #ffffff;
-    color: #1E2429; /* 활성화 시 글씨 색상을 회색으로 변경 (기존 흰색에서 회색으로) */
-    border: 1px solid #ffffff; /* 활성화된 상태에서도 테두리 흰색 유지 */
-}
-
-.toggle-button:hover:not(.active) {
-    background-color: #f0f0f0;
+    color: #1E2429;
 }
 
 .toggle-input {
-    padding: 5px; /* 패딩을 6px에서 5px로 줄임 */
-    border: 1px solid #ccc;
-    border-radius: 12px; /* 테두리를 더 둥글게 (기존 10px → 15px) */
-    width: 120px; /* 너비를 150px에서 120px로 줄임 */
-    font-size: 14px;
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
-}
-
-.toggle-input::-webkit-inner-spin-button,
-.toggle-input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    flex: 1;
+    height: 44px;
+    padding: 10px;
+    border: 1px solid #D0D6DC;
+    border-radius: 12px;
+    font-size: 16px;
+    color: #96A3B1;
 }
 
 .save-button {
-    padding: 5px 12px; /* 패딩을 6px 14px에서 5px 12px로 줄임 */
-    background-color: #007bff;
-    color: white;
+    height: 40px;
+    padding: 8px 16px;
+    background: #0A83FF;
+    border-radius: 12px;
+    color: #F5F6F6;
+    font-size: 16px;
+    font-weight: 600;
     border: none;
-    border-radius: 12px; /* 테두리를 더 둥글게 (기존 10px → 15px) */
     cursor: pointer;
-    font-size: 14px;
 }
 
-.save-button:hover {
-    background-color: #0056b3;
+/* 화살표 버튼 스타일 (기존 캘린더 버튼과 동일) */
+.calendar-header button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    border: 0.5px solid #D0D6DC;
+    background-color: #fff;
+    color: #111;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.calendar-header button:hover {
+    background-color: #F5F7F9;
+}
+
+.calendar-header button:active {
+    background-color: #F5F7F9;
+}
+
+/* "전체 내역보기 >" 버튼 스타일 */
+.TotalLogButton button {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* 텍스트와 화살표 간격 */
+    background-color: transparent; /* 배경 투명 */
+    border: 1px solid #D0D6DC; /* 캘린더 테두리 색상과 일치 */
+    border-radius: 4px; /* 둥근 모서리 */
+    padding: 6px 12px; /* 내부 여백 */
+    font-size: 14px; /* 텍스트 크기 */
+    color: #6B7280; /* 회색 텍스트, 캘린더 테마와 조화 */
+    font-weight: 500; /* 기본 텍스트 무게 */
+    cursor: pointer; /* 마우스 올리면 손 모양 */
+    transition: all 0.2s ease; /* 부드러운 전환 효과 */
+}
+
+/* 호버 효과 */
+.TotalLogButton button:hover {
+    background-color: #F5F7F9; /* 밝은 회색 배경, 캘린더 버튼 호버와 동일 */
+    border-color: #D0D6DC; /* 테두리 색상 유지 */
+}
+
+/* 클릭 효과 */
+.TotalLogButton button:active {
+    background-color: #F5F7F9; /* 클릭 시 밝은 회색 유지 */
+}
+
+/* 반응형 디자인 (필요 시) */
+@media (max-width: 480px) {
+    .TotalLogButton button {
+        font-size: 12px; /* 작은 화면에서 텍스트 크기 조정 */
+        padding: 4px 10px; /* 여백 조정 */
+    }
 }

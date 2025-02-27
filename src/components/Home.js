@@ -115,8 +115,9 @@ function Home() {
 
   const handleLogout = () => {
     localStorage.removeItem('bearerToken');
-    window.location.href = '/auth';
+    window.location.href = '/';
   };
+
 
   const handlePrevMonth = () => {
     setCurrentMonth(prev => {
@@ -138,6 +139,10 @@ function Home() {
     });
   };
 
+  const handleTotalLog = () => {
+    window.location.href = '/revenue';
+  };
+
   // 입력 값 변경 핸들러
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -145,10 +150,6 @@ function Home() {
 
   // 토글 저장 API 호출
   const handleToggleSubmit = async () => {
-    if (!inputValue || isNaN(inputValue) || parseFloat(inputValue) < 0) {
-      setError('유효한 금액을 입력해주세요 (0 이상의 숫자).');
-      return;
-    }
     try {
       if (inputMode === 'revenue') {
         await api.post('/log/revenue', { dailyRevenue: parseFloat(inputValue) });
@@ -199,6 +200,10 @@ function Home() {
   const daysInMonth = moment([currentYear, currentMonth - 1]).daysInMonth(); // Asia/Seoul 기준
   const firstDayOfMonth = moment([currentYear, currentMonth - 1, 1]).day(); // Asia/Seoul 기준
 
+  // 달력의 행 수 계산 (7일씩 나누고, 첫째 날의 요일로 시작)
+  const totalDays = daysInMonth + firstDayOfMonth; // 총 셀 수 (빈 셀 포함)
+  const rows = Math.ceil(totalDays / 7); // 7일(요일)로 나누어 행 수 계산
+
   const calendarGrid = [];
   for (let i = 0; i < firstDayOfMonth; i++) {
     calendarGrid.push({ day: null, status: 'empty' });
@@ -243,13 +248,10 @@ function Home() {
   };
 
   // 자산 그래프 데이터 생성 (Asia/Seoul 기준)
-  // 자산 그래프 데이터 생성 (Asia/Seoul 기준)
   const chartData = assetData && assetData.length > 0 ? (() => {
-    // 1. 고유한 날짜 배열 생성 및 정렬 (과거 -> 최신)
     const uniqueDates = [...new Set(assetData.map(item => moment(item.date).format('YYYY-MM-DD')))]
-      .sort((a, b) => moment(a).valueOf() - moment(b).valueOf()); // 날짜 오름차순 정렬
+      .sort((a, b) => moment(a).valueOf() - moment(b).valueOf());
 
-    // 2. 사용자별 데이터 매핑
     const getUserData = (name, isCurrentUser) => {
       return uniqueDates.map(date => {
         const entry = assetData.find(item =>
@@ -257,12 +259,12 @@ function Home() {
           item.name === name &&
           item.currentUser === isCurrentUser
         );
-        return entry ? entry.todayTotal || 0 : 0; // 데이터가 없으면 0 반환
+        return entry ? entry.todayTotal || 0 : 0;
       });
     };
 
     return {
-      labels: uniqueDates, // 정렬된 고유 날짜를 레이블로 사용
+      labels: uniqueDates,
       datasets: [
         {
           label: '김창민',
@@ -309,26 +311,26 @@ function Home() {
     scales: {
       y: {
         beginAtZero: true,
-        min: 0, // y 축 최소값 0원
-        max: 10000000, // y 축 최대값 5천만 원
+        min: 0,
+        max: 10000000,
         ticks: {
           color: '#666',
-          stepSize: 1000000, // 백만 원 간격으로 눈금 설정
+          stepSize: 1000000,
           callback: function (value) {
-            return value.toLocaleString() + '원'; // 숫자에 천 단위 구분자 추가
+            return value.toLocaleString() + '원';
           },
         },
         title: { display: true, text: '자산 (원)', color: '#666' },
       },
       x: {
         ticks: {
-          display: true, // x 축 틱 라벨(날짜) 표시 활성화
+          display: true,
           color: '#666',
           autoSkip: true,
           maxRotation: 30,
           minRotation: 30,
           callback: function (value, index, values) {
-            return chartData.labels[index]; // 백엔드 제공 날짜 그대로 표시
+            return chartData.labels[index];
           },
         },
         title: { display: true, text: '날짜', color: '#666' },
@@ -360,14 +362,13 @@ function Home() {
     },
     elements: {
       line: {
-        tension: 0, // 선을 직선으로 유지
+        tension: 0,
       },
     },
   };
 
   console.log('Asset Data:', assetData);
   console.log('Chart Data:', chartData);
-
   return (
     <div className="home-container">
       <aside className="sidebar">
@@ -381,113 +382,123 @@ function Home() {
       </aside>
 
       <main className="main-content">
-        <header className="header">
-          <span>{currentDate}</span>
-        </header>
+
 
         <section className="dashboard">
-          <div className="challenge-section">
-            <div className="challenge-user">
-              <span className="user-name">{userName}</span>
-            </div>
-            <div className="challenge-row">
-              <div className="challenge-content">
-                <span>100만불까지 </span>
-                {dailyQuest !== null && <span className="result-days" style={{ color: '#0A83FF' }}>{dailyQuest}일</span>}
-              </div>
-              <div className="challenge-stats">
-                <span>저축률</span>
-                <input
-                  type="number"
-                  value={per}
-                  onChange={handlePerChange}
-                  placeholder="per 입력"
-                  className="per-input"
-                />
-                <button className="action-button" onClick={handleSubmit}>확인</button>
-              </div>
-            </div>
-          </div>
-
-          <div className="assets-section">
-            {selectedDate ? (
-              <div className="assets-details">
-                <div className="date-display">
-                  <span className="date-value">{moment(selectedDate.date).format('YYYY.MM.DD')}</span>
+          <header className="header">
+            <span>{currentDate}</span>
+          </header>
+          <div className="left-column">
+            <div className="challenge-assets-column">
+              <div className="challenge-section">
+                <div className="challenge-user">
+                  <span className="user-name">{userName}</span>
                 </div>
-                <div className="asset-item">
-                  <span className="asset-label">전체 자산</span>
-                  <span className="asset-value">{Number(selectedDate.todayTotal).toLocaleString()}원</span>
-                </div>
-                <div className="asset-item">
-                  <span className="asset-label">수익</span>
-                  <span className="asset-value">{Number(selectedDate.addedRevenueMoney).toLocaleString()}원</span>
-                </div>
-                <div className="asset-item">
-                  <span className="asset-label">저축</span>
-                  <span className="asset-value">{Number(selectedDate.addedSaveMoney).toLocaleString()}원</span>
-                </div>
-                <div className="asset-item">
-                  <span className="asset-label">수익률</span>
-                  <span className="asset-value">{Number(selectedDate.addedRevenuePercent).toFixed(2)}%</span>
-                </div>
-                <div className="asset-item">
-                  <span className="asset-label">일일퀘스트</span>
-                  <span className="asset-value">{selectedDate.quest ? '완료' : '미완료'}</span>
-                </div>
-                <hr className="divider" /> {/* 구분선 유지 */}
-                <div className="input-section">
-                  <div className="toggle-row">
-                    <button
-                      className={`toggle-button ${inputMode === 'revenue' ? 'active' : ''}`}
-                      onClick={() => setInputMode('revenue')}
-                    >
-                      수익
-                    </button>
-                    <button
-                      className={`toggle-button ${inputMode === 'save' ? 'active' : ''}`}
-                      onClick={() => setInputMode('save')}
-                    >
-                      저축
-                    </button>
+                <div className="challenge-row">
+                  <div className="challenge-content">
+                    <span>100만불까지 </span>
+                    {dailyQuest !== null && <span className="result-days" style={{ color: '#0A83FF' }}>{dailyQuest}일</span>}
+                  </div>
+                  <div className="challenge-stats">
+                    <span>저축률</span>
                     <input
                       type="number"
-                      value={inputValue}
-                      onChange={handleInputChange}
-                      placeholder={inputMode === 'revenue' ? '수익 입력' : '저축 입력'}
-                      className="toggle-input"
+                      value={per}
+                      onChange={handlePerChange}
+                      placeholder="n%?"
+                      className="per-input"
                     />
-                    <button className="save-button" onClick={handleToggleSubmit}>저장</button>
+                    <button className="action-button" onClick={handleSubmit}>확인</button>
                   </div>
                 </div>
               </div>
-            ) : (
-              <p>날짜를 선택해주세요.</p>
-            )}
-          </div>
 
-          <div className="calendar-section">
-            <div className="calendar-header">
-              <button onClick={handlePrevMonth}>&lt;</button>
-              <h2>{currentYear}년 {currentMonth}월</h2>
-              <button onClick={handleNextMonth}>&gt;</button>
-
+              <div className="assets-section">
+                {selectedDate ? (
+                  <div className="assets-details">
+                    <div className="date-display">
+                      <span className="date-value">{moment(selectedDate.date).format('YYYY.MM.DD')}</span>
+                    </div>
+                    <div className="asset-item">
+                      <span className="asset-label">전체 자산</span>
+                      <span className="asset-value">{Number(selectedDate.todayTotal).toLocaleString()}원</span>
+                    </div>
+                    <div className="asset-item">
+                      <span className="asset-label">수익</span>
+                      <span className="asset-value">{Number(selectedDate.addedRevenueMoney).toLocaleString()}원</span>
+                    </div>
+                    <div className="asset-item">
+                      <span className="asset-label">저축</span>
+                      <span className="asset-value">{Number(selectedDate.addedSaveMoney).toLocaleString()}원</span>
+                    </div>
+                    <div className="asset-item">
+                      <span className="asset-label">수익률</span>
+                      <span className="asset-value">{Number(selectedDate.addedRevenuePercent).toFixed(2)}%</span>
+                    </div>
+                    <div className="asset-item">
+                      <span className="asset-label">일일퀘스트</span>
+                      <span className="asset-value">{selectedDate.quest ? '완료' : '미완료'}</span>
+                    </div>
+                    <div className="input-section">
+                      <div className="toggle-row">
+                        <button
+                          className={`toggle-button ${inputMode === 'revenue' ? 'active' : ''}`}
+                          onClick={() => setInputMode('revenue')}
+                        >
+                          수익
+                        </button>
+                        <button
+                          className={`toggle-button ${inputMode === 'save' ? 'active' : ''}`}
+                          onClick={() => setInputMode('save')}
+                        >
+                          저축
+                        </button>
+                        <input
+                          type="number"
+                          value={inputValue}
+                          onChange={handleInputChange}
+                          placeholder={inputMode === 'revenue' ? '수익 입력' : '저축 입력'}
+                          className="toggle-input"
+                        />
+                        <button className="save-button" onClick={handleToggleSubmit}>저장</button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <p>날짜를 선택해주세요.</p>
+                )}
+              </div>
             </div>
-            <div className="calendar-grid">
-              {['일', '월', '화', '수', '목', '금', '토'].map(day => (
-                <div key={day} className="calendar-day-header">
-                  {day}
+
+            <div className={`calendar-section calendar-section-rows-${rows}`}>
+              <div className="calendar-header">
+                <h2>{currentYear}년 {currentMonth}월</h2>
+                <button onClick={handlePrevMonth}>&lt;</button>
+                <button onClick={handleNextMonth}>&gt;</button>
+                <div className="TotalLogButton">
+                  <button onClick={handleTotalLog}>
+                    <span>전체 내역보기</span>
+                    <span>&gt;</span> {/* HTML 엔티티로 화살표 표시 */}
+                  </button>
                 </div>
-              ))}
-              {calendarGrid.map((item, index) => (
-                <div
-                  key={index}
-                  className={`calendar-day ${item.status === 'empty' ? 'empty' : item.status} ${item.isToday ? 'today' : ''}`}
-                  onClick={() => handleDateClick(item.day)}
-                >
-                  {item.day || ''}
-                </div>
-              ))}
+              </div>
+
+              <div className="calendar-grid">
+                {['일', '월', '화', '수', '목', '금', '토'].map(day => (
+                  <div key={day} className="calendar-day-header">
+                    {day}
+                  </div>
+                ))}
+                {calendarGrid.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`calendar-day ${item.status === 'empty' ? 'empty' : item.status} ${item.isToday ? 'today' : ''}`}
+                    onClick={() => handleDateClick(item.day)}
+                  >
+                    {item.day || ''}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
