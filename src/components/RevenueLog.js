@@ -38,7 +38,10 @@ function RevenueLog() {
     console.log('Clicked Home'); // 디버깅용 로그
     navigate('/home');
   };
-
+  const handleSeed = () => {
+    console.log("Seed clicked");
+    navigate('/seed');
+  };
   const handleLogout = () => {
     console.log('Clicked Logout'); // 디버깅용 로그
     localStorage.removeItem('bearerToken');
@@ -60,11 +63,9 @@ function RevenueLog() {
     <div className="home-container">
       <aside className="sidebar">
         <ul>
-        <li onClick={handleHome} style={{ cursor: 'pointer', color: 'blue' }}>🏠 홈</li>
-          <li>👤 실시간차트</li>
-          <li>💰 뉴스/라이브</li>
-          <li>💸 자산설정</li>
-          <li style={{ cursor: 'pointer', color: 'red' }}>로그아웃</li>
+          <li onClick={handleHome} style={{ cursor: 'pointer' }}>🏠 홈</li>
+          <li onClick={handleSeed} style={{ cursor: 'pointer' }}>💸 자산설정</li>
+          <li onClick={handleLogout} style={{ cursor: 'pointer' }}>👋 로그아웃</li>
         </ul>
       </aside>
       <div className="main-content">
@@ -77,11 +78,9 @@ function RevenueLog() {
     <div className="home-container">
       <aside className="sidebar">
         <ul>
-          <li onClick={handleHome} style={{ cursor: 'pointer', color: 'blue' }}>🏠 홈</li>
-          <li>👤 실시간차트</li>
-          <li>💰 뉴스/라이브</li>
-          <li>💸 자산설정</li>
-          <li onClick={handleLogout} style={{ cursor: 'pointer', color: 'red' }}>로그아웃</li>
+          <li onClick={handleHome} style={{ cursor: 'pointer' }}>🏠 홈</li>
+          <li onClick={handleSeed} style={{ cursor: 'pointer' }}>💸 자산설정</li>
+          <li onClick={handleLogout} style={{ cursor: 'pointer' }}>👋 로그아웃</li>
         </ul>
       </aside>
       <div className="main-content">
@@ -94,11 +93,9 @@ function RevenueLog() {
     <div className="home-container">
       <aside className="sidebar">
         <ul>
-        <li onClick={handleHome} style={{ cursor: 'pointer', color: 'blue' }}>🏠 홈</li>
-          <li>👤 실시간차트</li>
-          <li>💰 뉴스/라이브</li>
-          <li>💸 자산설정</li>
-          <li onClick={handleLogout} style={{ cursor: 'pointer', color: 'red' }}>로그아웃</li>
+          <li onClick={handleHome} style={{ cursor: 'pointer' }}>🏠 홈</li>
+          <li onClick={handleSeed} style={{ cursor: 'pointer' }}>💸 자산설정</li>
+          <li onClick={handleLogout} style={{ cursor: 'pointer' }}>👋 로그아웃</li>
         </ul>
       </aside>
 

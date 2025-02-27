@@ -2,7 +2,6 @@
     display: flex;
     min-height: 100vh;
     background: #F5F6F6;
-    font-family: Pretendard, -apple-system, system-ui, sans-serif;
 }
 
 .sidebar {
@@ -12,6 +11,9 @@
     box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.08);
     position: fixed;
     height: 100vh;
+    z-index: 1000;
+    top: 0;
+    left: 0;
 }
 
 .sidebar ul {
@@ -24,25 +26,30 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 4px 8px;
+    padding: 8px 16px;
+    /* 패딩을 늘려 클릭 범위 확장 */
     margin-bottom: 32px;
     color: #607081;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    pointer-events: auto; /* 클릭 이벤트를 명시적으로 활성화 */
+    width: 100%;
+    /* sidebar 너비를 모두 활용 */
+    box-sizing: border-box;
+    /* 패딩이 너비에 포함되도록 */
+    transition: background-color 0.2s ease;
+    /* 호버 효과 추가 (선택 사항) */
 }
 
-.sidebar li:first-child {
-    color: #0A83FF;
-}
+
 
 .main-content {
     margin-left: 165px;
     padding: 72px;
     width: calc(100% - 165px);
-    max-width: 1920px;
-    margin: 0 auto;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 }
 
 .header {
@@ -203,17 +210,22 @@
 }
 
 .calendar-header {
-    width: 440px; /* 캘린더의 전체 폭 유지 */
+    width: 440px;
+    /* 캘린더의 전체 폭 유지 */
     display: flex;
-    justify-content: space-between; /* 좌측(월/년도, 화살표)와 우측(버튼)을 분배 */
-    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: space-between;
+    /* 좌측(월/년도, 화살표)와 우측(버튼)을 분배 */
+    align-items: center;
+    /* 수직 중앙 정렬 */
     padding-bottom: 24px;
     border-bottom: 1px solid #D0D6DC;
 }
+
 .calendar-title-controls {
     display: flex;
     align-items: center;
-    gap: 16px; /* <h2>와 calendar-controls 간의 간격 설정 */
+    gap: 16px;
+    /* <h2>와 calendar-controls 간의 간격 설정 */
 }
 
 .calendar-header h2 {
@@ -225,7 +237,8 @@
 /* <와 > 버튼을 감싸는 컨테이너 */
 .calendar-controls {
     display: flex;
-    gap: 0px; /* <와 > 버튼 간의 간격 */
+    gap: 0px;
+    /* <와 > 버튼 간의 간격 */
     align-items: center;
 }
 
@@ -426,32 +439,45 @@
     display: 10px;
     width: 150px;
     align-items: center;
-    gap: 4px; /* 텍스트와 화살표 간격 */
-    background-color: transparent; /* 배경 투명 */
-    border: none;    
-    padding: 6px 0px 6px 30px; /* 내부 여백 */
-    font-size: 14px; /* 텍스트 크기 */
-    color: #6B7280; /* 회색 텍스트, 캘린더 테마와 조화 */
-    font-weight: 500; /* 기본 텍스트 무게 */
-    cursor: pointer; /* 마우스 올리면 손 모양 */
-    transition: all 0.2s ease; /* 부드러운 전환 효과 */
+    gap: 4px;
+    /* 텍스트와 화살표 간격 */
+    background-color: transparent;
+    /* 배경 투명 */
+    border: none;
+    padding: 6px 0px 6px 30px;
+    /* 내부 여백 */
+    font-size: 14px;
+    /* 텍스트 크기 */
+    color: #6B7280;
+    /* 회색 텍스트, 캘린더 테마와 조화 */
+    font-weight: 500;
+    /* 기본 텍스트 무게 */
+    cursor: pointer;
+    /* 마우스 올리면 손 모양 */
+    transition: all 0.2s ease;
+    /* 부드러운 전환 효과 */
 }
 
 /* 호버 효과 */
 .TotalLogButton button:hover {
-    background-color: #F5F7F9; /* 밝은 회색 배경, 캘린더 버튼 호버와 동일 */
-    border-color: #D0D6DC; /* 테두리 색상 유지 */
+    background-color: #F5F7F9;
+    /* 밝은 회색 배경, 캘린더 버튼 호버와 동일 */
+    border-color: #D0D6DC;
+    /* 테두리 색상 유지 */
 }
 
 /* 클릭 효과 */
 .TotalLogButton button:active {
-    background-color: #F5F7F9; /* 클릭 시 밝은 회색 유지 */
+    background-color: #F5F7F9;
+    /* 클릭 시 밝은 회색 유지 */
 }
 
 /* 반응형 디자인 (필요 시) */
 @media (max-width: 480px) {
     .TotalLogButton button {
-        font-size: 12px; /* 작은 화면에서 텍스트 크기 조정 */
-        padding: 4px 10px; /* 여백 조정 */
+        font-size: 12px;
+        /* 작은 화면에서 텍스트 크기 조정 */
+        padding: 4px 10px;
+        /* 여백 조정 */
     }
 }

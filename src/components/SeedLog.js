@@ -41,7 +41,10 @@ function SeedLog() {
         console.log('Clicked Home');
         navigate('/home');
     };
-
+    const handleSeed = () => {
+        console.log("Seed clicked");
+        navigate('/seed');
+    };
     const handleLogout = () => {
         console.log('Clicked Logout');
         localStorage.removeItem('bearerToken');
@@ -87,11 +90,9 @@ function SeedLog() {
         <div className="home-container">
             <aside className="sidebar">
                 <ul>
-                    <button onClick={handleHome} className="sidebar-button" style={{ color: 'blue' }}>🏠 홈</button>
-                    <button className="sidebar-button">👤 실시간차트</button>
-                    <button className="sidebar-button">💰 뉴스/라이브</button>
-                    <button className="sidebar-button">💸 자산설정</button>
-                    <button onClick={handleLogout} className="sidebar-button" style={{ color: 'red' }}>로그아웃</button>
+                    <li onClick={handleHome} style={{ cursor: 'pointer' }}>🏠 홈</li>
+                    <li onClick={handleSeed} style={{ cursor: 'pointer' }}>💸 자산설정</li>
+                    <li onClick={handleLogout} style={{ cursor: 'pointer' }}>👋 로그아웃</li>
                 </ul>
             </aside>
             <div className="main-content">
@@ -104,11 +105,9 @@ function SeedLog() {
         <div className="home-container">
             <aside className="sidebar">
                 <ul>
-                    <button onClick={handleHome} className="sidebar-button" style={{ color: 'blue' }}>🏠 홈</button>
-                    <button className="sidebar-button">👤 실시간차트</button>
-                    <button className="sidebar-button">💰 뉴스/라이브</button>
-                    <button className="sidebar-button">💸 자산설정</button>
-                    <button onClick={handleLogout} className="sidebar-button" style={{ color: 'red' }}>로그아웃</button>
+                    <li onClick={handleHome} style={{ cursor: 'pointer' }}>🏠 홈</li>
+                    <li onClick={handleSeed} style={{ cursor: 'pointer' }}>💸 자산설정</li>
+                    <li onClick={handleLogout} style={{ cursor: 'pointer' }}>👋 로그아웃</li>
                 </ul>
             </aside>
             <div className="main-content">
@@ -121,11 +120,9 @@ function SeedLog() {
         <div className="home-container">
             <aside className="sidebar">
                 <ul>
-                    <button onClick={handleHome} className="sidebar-button" style={{ color: 'blue' }}>🏠 홈</button>
-                    <button className="sidebar-button">👤 실시간차트</button>
-                    <button className="sidebar-button">💰 뉴스/라이브</button>
-                    <button className="sidebar-button">💸 자산설정</button>
-                    <button onClick={handleLogout} className="sidebar-button" style={{ color: 'red' }}>로그아웃</button>
+                    <li onClick={handleHome} style={{ cursor: 'pointer' }}>🏠 홈</li>
+                    <li onClick={handleSeed} style={{ cursor: 'pointer' }}>💸 자산설정</li>
+                    <li onClick={handleLogout} style={{ cursor: 'pointer' }}>👋 로그아웃</li>
                 </ul>
             </aside>
 
