@@ -24,7 +24,7 @@
     margin: 0;
 }
 
-.sidebar li {
+.sidebar-button {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -34,28 +34,28 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%; /* 버튼이 li와 동일한 너비를 가지도록 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
     pointer-events: auto; /* 클릭 이벤트를 명시적으로 활성화 */
 }
 
-.sidebar li:first-child {
-    color: #0A83FF; /* "홈" 기본 색상 유지, onClick 시 blue로 오버라이드 */
-}
-
-.sidebar li:hover {
-    color: #0A83FF; /* 모든 항목에 호버 시 파란색으로 변경 */
+.sidebar-button:hover {
+    color: #0A83FF; /* 모든 버튼에 호버 시 파란색으로 변경 */
 }
 
 /* "홈"과 "로그아웃"의 색상 및 클릭 스타일 */
-.sidebar li:nth-child(1) { /* "홈" */
+.sidebar-button:nth-child(1) { /* "홈" */
     color: blue; /* 기본 파란색 */
 }
 
-.sidebar li:nth-child(5) { /* "로그아웃" */
+.sidebar-button:nth-child(5) { /* "로그아웃" */
     color: red; /* 기본 빨간색 */
 }
 
 .main-content {
-    margin-left: 165px; /* 사이드바 너비와 정확히 맞춤 */
+    margin-left: 165px; /* 사이드바 너비와 정확히 맞춐 */
     padding: 72px;
     width: calc(100% - 165px); /* 사이드바 너비만큼 뺌 */
     max-width: 1920px;
@@ -72,8 +72,15 @@
 .page-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 24px;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
 }
 
 .page-title {
@@ -82,54 +89,108 @@
     color: #1E2429;
 }
 
-/* Table Container (challenge-section 스타일과 유사) */
-.revenue-table-container {
-    background: #FFF;
-    border-radius: 12px;
-    padding: 16px 24px; /* challenge-section의 패딩과 동일 */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05); /* challenge-section과 동일한 그림자 효과 */
+/* 시드 설정 입력란 및 요약 행 */
+.seed-input-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 24px;
 }
 
-/* Table */
-.revenue-table {
+.seed-input-container {
+    
+    border-radius: 12px;
+    
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.seed-input {
+    width: 500px;
+    height: 20px;
+    padding: 10px;
+    border: 1px solid #D0D6DC;
+    border-radius: 12px;
+    font-size: 16px;
+    color: #96A3B1;
+}
+
+.seed-button {
+    height: 40px;
+    padding: 8px 16px;
+    background: #0A83FF;
+    border-radius: 12px;
+    color: #F5F6F6;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.seed-summary {
+    display: flex;
+    gap: 16px;
+    background: #FFF;
+    border: 1px solid #D0D6DC;
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin-left: 400px;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1E2429;
+}
+
+.seed-summary span:nth-child(1) { /* "추가된 시드" 텍스트와 금액 */
+    color: #0A83FF; /* 파란색 */
+}
+
+.seed-summary span:nth-child(2) { /* "내 최초 시드" 텍스트와 금액 */
+    color: #000; /* 검은색 */
+}
+
+/* 시드 로그 테이블 */
+.seed-table-container {
+    background: #FFF;
+    border-radius: 12px;
+    padding: 16px 24px;
+}
+
+.seed-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.revenue-table th,
-.revenue-table td {
+.seed-table th,
+.seed-table td {
     padding: 12px;
     text-align: center;
     font-size: 16px;
     color: #1E2429;
-    width: 20%; /* 5개의 컬럼을 균등하게 나누기 위해 20%씩 설정 */
+    width: 33.33%; /* 3개의 컬럼을 균등하게 나누기 위해 33.33%씩 설정 */
 }
 
-.revenue-table th {
+.seed-table th {
     font-weight: 600;
     color: #666;
     border-bottom: 1px solid #D0D6DC;
 }
 
-.revenue-table td {
+.seed-table td {
     font-weight: 500;
 }
 
-/* 수익률 음수 처리 */
-.revenue-table td.negative {
-    color: #F28282; /* 음수일 때 빨간색으로 표시 */
-}
-
 /* 테이블 행 호버 효과 */
-.revenue-table tr {
+.seed-table tr {
     transition: background-color 0.2s ease;
 }
 
-.revenue-table tr:hover {
+.seed-table tr:hover {
     background-color: #F9F9F9;
 }
 
-/* Pagination (revenue-table-container 내부에 위치하도록 조정) */
+/* Pagination (seed-table-container 내부에 위치하도록 조정) */
 .pagination {
     display: flex;
     justify-content: center;
@@ -179,31 +240,13 @@
     color: #F28282;
 }
 
-/* Quest status */
-.quest-status {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    border-radius: 4px;
-}
-
-.quest-status.complete {
-    color: #0A83FF;
-}
-
-.quest-status.incomplete {
-    color: #F28282;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .sidebar {
         width: 60px;
     }
 
-    .sidebar li span {
+    .sidebar-button span {
         display: none;
     }
 
@@ -212,11 +255,26 @@
         padding: 20px;
     }
 
-    .revenue-table th,
-    .revenue-table td {
+    .seed-input-row {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .seed-input-container,
+    .seed-table-container {
+        padding: 12px 16px; /* 모바일에서 패딩 감소 */
+    }
+
+    .seed-input {
+        width: 100%; /* 모바일에서 입력 필드 너비 100% */
+    }
+
+    .seed-table th,
+    .seed-table td {
         padding: 10px;
         font-size: 14px;
-        width: 20%; /* 모바일에서도 균등한 너비 유지 */
+        width: 33.33%; /* 모바일에서도 균등한 너비 유지 */
     }
 
     .pagination-button {
@@ -224,7 +282,7 @@
         font-size: 12px;
     }
 
-    .revenue-table-container {
-        padding: 12px 16px; /* 모바일에서 패딩 감소 */
+    .seed-summary {
+        font-size: 14px; /* 모바일에서 텍스트 크기 조정 */
     }
 }

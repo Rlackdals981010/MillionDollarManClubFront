@@ -5,6 +5,9 @@ import 'chart.js/auto';
 import { jwtDecode } from 'jwt-decode';
 import './Home.css';
 import moment from 'moment-timezone'; // moment-timezone 임포트
+import { useNavigate } from 'react-router-dom';
+    
+    
 
 // moment를 Asia/Seoul 시간대로 설정
 moment.tz.setDefault('Asia/Seoul');
@@ -27,7 +30,7 @@ function Home() {
 
   const currentDateObj = moment().toDate(); // Asia/Seoul 기준 Date 객체
   const currentDate = moment(currentDateObj).format('YYYY.MM.DD'); // 한국 형식으로 포매팅
-
+  const navigate = useNavigate();
   const getUserNameFromToken = () => {
     const token = localStorage.getItem('bearerToken');
     if (!token) return '사용자';
@@ -112,10 +115,12 @@ function Home() {
       setDailyQuest(null);
     }
   };
-
+  const handleHome = () => {
+    navigate('/home');
+  };
   const handleLogout = () => {
     localStorage.removeItem('bearerToken');
-    window.location.href = '/';
+    navigate('/home');
   };
 
 
@@ -159,7 +164,8 @@ function Home() {
       setInputValue(''); // 입력 초기화
       setError(null); // 에러 초기화
       // 데이터 새로고침 (필요 시)
-      await fetchMonthlyRevenue(currentYear, currentMonth);
+      // await fetchMonthlyRevenue(currentYear, currentMonth);
+      window.location.href = '/home';
     } catch (error) {
       setError(`${inputMode === 'revenue' ? '수익' : '저축'} 등록에 실패했습니다: ` + (error.response?.data?.message || error.message));
     }
@@ -373,7 +379,7 @@ function Home() {
     <div className="home-container">
       <aside className="sidebar">
         <ul>
-          <li>🏠 홈</li>
+          <li onClick={handleHome} style={{ cursor: 'pointer', color: 'blue' }}>🏠 홈</li>
           <li>👤 실시간차트</li>
           <li>💰 뉴스/라이브</li>
           <li>💸 자산설정</li>

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import moment from 'moment-timezone';
 import './RevenueLog.css';
+
 // moment를 Asia/Seoul 시간대로 설정
 moment.tz.setDefault('Asia/Seoul');
 
@@ -11,6 +13,7 @@ function RevenueLog() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // 페이지당 항목 수, 스크린샷과 동일
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRevenueLog = async () => {
@@ -31,8 +34,19 @@ function RevenueLog() {
     return new Intl.NumberFormat('ko-KR').format(amount) + '₩';
   };
 
+  const handleHome = () => {
+    console.log('Clicked Home'); // 디버깅용 로그
+    navigate('/home');
+  };
+
+  const handleLogout = () => {
+    console.log('Clicked Logout'); // 디버깅용 로그
+    localStorage.removeItem('bearerToken');
+    navigate('/');
+  };
+
   const formatPercent = (value) => {
-    return  + Number(value).toFixed(2) + '%';
+    return (value >= 0 ? '+ ' : '') + Number(value).toFixed(2) + '%'; // 음수와 양수 모두 올바르게 처리
   };
 
   // 페이지네이션 로직
@@ -42,12 +56,11 @@ function RevenueLog() {
   const totalPages = Math.ceil(revenueData.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   if (loading) return (
     <div className="home-container">
       <aside className="sidebar">
         <ul>
-          <li>🏠 홈</li>
+        <li onClick={handleHome} style={{ cursor: 'pointer', color: 'blue' }}>🏠 홈</li>
           <li>👤 실시간차트</li>
           <li>💰 뉴스/라이브</li>
           <li>💸 자산설정</li>
@@ -64,11 +77,11 @@ function RevenueLog() {
     <div className="home-container">
       <aside className="sidebar">
         <ul>
-          <li>🏠 홈</li>
+          <li onClick={handleHome} style={{ cursor: 'pointer', color: 'blue' }}>🏠 홈</li>
           <li>👤 실시간차트</li>
           <li>💰 뉴스/라이브</li>
           <li>💸 자산설정</li>
-          <li style={{ cursor: 'pointer', color: 'red' }}>로그아웃</li>
+          <li onClick={handleLogout} style={{ cursor: 'pointer', color: 'red' }}>로그아웃</li>
         </ul>
       </aside>
       <div className="main-content">
@@ -81,20 +94,20 @@ function RevenueLog() {
     <div className="home-container">
       <aside className="sidebar">
         <ul>
-          <li>🏠 홈</li>
+        <li onClick={handleHome} style={{ cursor: 'pointer', color: 'blue' }}>🏠 홈</li>
           <li>👤 실시간차트</li>
           <li>💰 뉴스/라이브</li>
           <li>💸 자산설정</li>
-          <li onClick={() => { localStorage.removeItem('bearerToken'); window.location.href = '/'; }} style={{ cursor: 'pointer', color: 'red' }}>로그아웃</li>
+          <li onClick={handleLogout} style={{ cursor: 'pointer', color: 'red' }}>로그아웃</li>
         </ul>
       </aside>
-      
+
       <div className="main-content">
         <div className="content-wrapper">
           <div className="page-header">
             <h1 className="page-title">수익/저축 전체 내역</h1>
           </div>
-          
+
           <div className="revenue-table-container">
             <table className="revenue-table">
               <thead>

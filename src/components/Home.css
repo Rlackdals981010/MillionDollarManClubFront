@@ -30,6 +30,7 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    pointer-events: auto; /* 클릭 이벤트를 명시적으로 활성화 */
 }
 
 .sidebar li:first-child {
