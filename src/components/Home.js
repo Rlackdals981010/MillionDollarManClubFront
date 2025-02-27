@@ -6,8 +6,8 @@ import { jwtDecode } from 'jwt-decode';
 import './Home.css';
 import moment from 'moment-timezone'; // moment-timezone 임포트
 import { useNavigate } from 'react-router-dom';
-    
-    
+
+
 
 // moment를 Asia/Seoul 시간대로 설정
 moment.tz.setDefault('Asia/Seoul');
@@ -478,13 +478,17 @@ function Home() {
 
             <div className={`calendar-section calendar-section-rows-${rows}`}>
               <div className="calendar-header">
-                <h2>{currentYear}년 {currentMonth}월</h2>
-                <button onClick={handlePrevMonth}>&lt;</button>
-                <button onClick={handleNextMonth}>&gt;</button>
+                <div className="calendar-title-controls">
+                  <h2>{currentYear}년 {currentMonth}월</h2>
+                  <div className="calendar-controls">
+                    <button onClick={handlePrevMonth}>{"<"}</button>
+                    <button onClick={handleNextMonth}>{">"}</button>
+                  </div>
+                </div>
                 <div className="TotalLogButton">
                   <button onClick={handleTotalLog}>
                     <span>전체 내역보기</span>
-                    <span>&gt;</span> {/* HTML 엔티티로 화살표 표시 */}
+                    <span>{">"}</span>
                   </button>
                 </div>
               </div>

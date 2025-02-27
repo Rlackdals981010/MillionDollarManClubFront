@@ -210,12 +210,23 @@
     padding-bottom: 24px;
     border-bottom: 1px solid #D0D6DC;
 }
+.calendar-title-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* <h2>와 calendar-controls 간의 간격 설정 */
+}
 
 .calendar-header h2 {
     color: #000;
     font-size: 18px;
     font-weight: 600;
-    margin-right: 8px;
+}
+
+/* <와 > 버튼을 감싸는 컨테이너 */
+.calendar-controls {
+    display: flex;
+    gap: 0px; /* <와 > 버튼 간의 간격 */
+    align-items: center;
 }
 
 .calendar-controls {
@@ -223,6 +234,7 @@
     border: 1px solid #D0D6DC;
     border-radius: 4px;
 }
+
 
 .calendar-controls button {
     width: 32px;
@@ -385,6 +397,7 @@
 }
 
 /* 화살표 버튼 스타일 (기존 캘린더 버튼과 동일) */
+/* 버튼 스타일 */
 .calendar-header button {
     width: 32px;
     height: 32px;
@@ -392,7 +405,6 @@
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    border: 0.5px solid #D0D6DC;
     background-color: #fff;
     color: #111;
     font-size: 14px;
@@ -400,6 +412,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
+
 .calendar-header button:hover {
     background-color: #F5F7F9;
 }
@@ -410,13 +423,13 @@
 
 /* "전체 내역보기 >" 버튼 스타일 */
 .TotalLogButton button {
-    display: flex;
+    display: 10px;
+    width: 150px;
     align-items: center;
     gap: 4px; /* 텍스트와 화살표 간격 */
     background-color: transparent; /* 배경 투명 */
-    border: 1px solid #D0D6DC; /* 캘린더 테두리 색상과 일치 */
-    border-radius: 4px; /* 둥근 모서리 */
-    padding: 6px 12px; /* 내부 여백 */
+    border: none;    
+    padding: 6px 0px 6px 30px; /* 내부 여백 */
     font-size: 14px; /* 텍스트 크기 */
     color: #6B7280; /* 회색 텍스트, 캘린더 테마와 조화 */
     font-weight: 500; /* 기본 텍스트 무게 */
