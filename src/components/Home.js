@@ -169,9 +169,12 @@ function Home() {
       }
       setInputValue(''); // 입력 초기화
       setError(null); // 에러 초기화
-      // 데이터 새로고침 (필요 시)
-      // await fetchMonthlyRevenue(currentYear, currentMonth);
-      window.location.href = '/home';
+      await Promise.all([
+        fetchMonthlyQuest(currentYear, currentMonth),
+        fetchMonthlyRevenue(currentYear, currentMonth),
+        fetchAssetData(),
+      ]);
+      
     } catch (error) {
       setError(`${inputMode === 'revenue' ? '수익' : '저축'} 등록에 실패했습니다: ` + (error.response?.data?.message || error.message));
     }
@@ -324,7 +327,7 @@ function Home() {
       y: {
         beginAtZero: true,
         min: 0,
-        max: 10000000,
+        max: 100000000,
         ticks: {
           color: '#666',
           stepSize: 1000000,
