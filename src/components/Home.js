@@ -397,7 +397,7 @@ function Home() {
             const label = context.dataset.label || '';
             const value = context.parsed.y || 0;
             const date = chartData.labels[context.dataIndex] || '';
-            return `${label}: ${value.toLocaleString()}원 (${date})`;
+            return `${label}: ${value.toLocaleString()}$ (${date})`;
           },
         },
       },
@@ -461,15 +461,15 @@ function Home() {
                     </div>
                     <div className="asset-item">
                       <span className="asset-label">전체 자산</span>
-                      <span className="asset-value">{Number(selectedDate.todayTotal).toLocaleString()}원</span>
+                      <span className="asset-value">{Number(selectedDate.todayTotal).toLocaleString()}$</span>
                     </div>
                     <div className="asset-item">
                       <span className="asset-label">수익</span>
-                      <span className="asset-value">{Number(selectedDate.addedRevenueMoney).toLocaleString()}원</span>
+                      <span className="asset-value">{Number(selectedDate.addedRevenueMoney).toLocaleString()}$</span>
                     </div>
                     <div className="asset-item">
                       <span className="asset-label">저축</span>
-                      <span className="asset-value">{Number(selectedDate.addedSaveMoney).toLocaleString()}원</span>
+                      <span className="asset-value">{Number(selectedDate.addedSaveMoney).toLocaleString()}$</span>
                     </div>
                     <div className="asset-item">
                       <span className="asset-label">수익률</span>
