@@ -162,19 +162,46 @@ function Home() {
   // 토글 저장 API 호출
   const handleToggleSubmit = async () => {
     try {
-      if (inputMode === 'revenue') {
-        await api.post('/log/revenue', { dailyRevenue: parseFloat(inputValue) });
-      } else {
-        await api.post('/log/save-money', { dailySaveMoney: parseFloat(inputValue) });
+      const newValue = parseFloat(inputValue);
+      if (isNaN(newValue)) {
+        setError('유효한 숫자를 입력해주세요.');
+        return;
       }
+      if (!selectedDate) {
+        setError('날짜를 선택해주세요.');
+        return;
+      }
+
+      const formattedDate = moment(selectedDate.date).format('YYYY-MM-DD'); // 선택한 날짜를 YYYY-MM-DD 형식으로 변환
+      const token = localStorage.getItem('bearerToken');
+
+      if (inputMode === 'revenue') {
+        await api.post(
+          '/log/revenue',
+          { dailyRevenue: newValue, date: formattedDate },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        await api.post(
+          '/log/save-money',
+          { dailySaveMoney: newValue, date: formattedDate },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
+
       setInputValue(''); // 입력 초기화
       setError(null); // 에러 초기화
+      // 데이터 새로고침
       await Promise.all([
         fetchMonthlyQuest(currentYear, currentMonth),
         fetchMonthlyRevenue(currentYear, currentMonth),
         fetchAssetData(),
       ]);
-      
+      // 선택된 날짜 동기화
+      const updatedRevenue = monthlyRevenue.find(r =>
+        moment(r.date).format('YYYY-MM-DD') === formattedDate
+      );
+      setSelectedDate(updatedRevenue || { ...selectedDate });
     } catch (error) {
       setError(`${inputMode === 'revenue' ? '수익' : '저축'} 등록에 실패했습니다: ` + (error.response?.data?.message || error.message));
     }
