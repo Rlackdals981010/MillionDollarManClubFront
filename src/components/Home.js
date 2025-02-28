@@ -359,7 +359,7 @@ function Home() {
           color: '#666',
           stepSize: 1000,
           callback: function (value) {
-            return value.toLocaleString() + '원';
+            return value.toLocaleString() + '$';
           },
         },
         title: { display: true, text: '자산 ($)', color: '#666' },
