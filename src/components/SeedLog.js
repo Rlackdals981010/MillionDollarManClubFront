@@ -139,7 +139,7 @@ function SeedLog() {
                                 type="number"
                                 value={seedInput}
                                 onChange={(e) => setSeedInput(e.target.value)}
-                                placeholder="시드 금액 입력 (₩)"
+                                placeholder="시드 금액 입력 ($)"
                                 className="seed-input"
                             />
                             <button onClick={handleSetSeed} className="seed-button">설정</button>
