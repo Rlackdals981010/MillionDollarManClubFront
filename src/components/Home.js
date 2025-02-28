@@ -354,7 +354,7 @@ function Home() {
       y: {
         beginAtZero: true,
         min: 0,
-        max: 100000000,
+        max: 1000000,
         ticks: {
           color: '#666',
           stepSize: 1000000,
@@ -362,7 +362,7 @@ function Home() {
             return value.toLocaleString() + '원';
           },
         },
-        title: { display: true, text: '자산 (원)', color: '#666' },
+        title: { display: true, text: '자산 ($)', color: '#666' },
       },
       x: {
         ticks: {
