@@ -354,10 +354,10 @@ function Home() {
       y: {
         beginAtZero: true,
         min: 0,
-        max: 1000000,
+        max: 100000,
         ticks: {
           color: '#666',
-          stepSize: 1000000,
+          stepSize: 1000,
           callback: function (value) {
             return value.toLocaleString() + '원';
           },
