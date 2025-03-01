@@ -294,65 +294,39 @@ function Home() {
     const uniqueDates = [...new Set(assetData.map(item => moment(item.date).format('YYYY-MM-DD')))]
       .sort((a, b) => moment(a).valueOf() - moment(b).valueOf());
 
-    const getUserData = (name, isCurrentUser) => {
-      // 사용자별 데이터 매핑
-      const userData = assetData.filter(item => item.name === name && item.currentUser === isCurrentUser);
-      const result = uniqueDates.map(date => {
+    const getUserData = (name) => {
+      const userData = assetData.filter(item => item.name === name);
+      return uniqueDates.map(date => {
         const entry = userData.find(item => moment(item.date).format('YYYY-MM-DD') === date);
         if (entry && entry.todayTotal > 0) {
-          return entry.todayTotal; // todayTotal이 0보다 크면 해당 값을 사용
+          return entry.todayTotal;
         } else {
-          // todayTotal이 0이거나 데이터가 없으면 이전 날짜에서 0보다 큰 가장 최근 값을 찾음
           const previousEntries = userData
             .filter(item => moment(item.date).isBefore(moment(date)) && item.todayTotal > 0)
             .sort((a, b) => moment(b.date).valueOf() - moment(a.date).valueOf());
-
-          if (previousEntries.length > 0) {
-            const latestEntry = previousEntries[0]; // 가장 최근 값
-            return latestEntry.todayTotal;
-          }
-          return 0; // 이전에 0보다 큰 값이 없으면 0 반환
+          return previousEntries.length > 0 ? previousEntries[0].todayTotal : 0;
         }
       });
-      return result;
     };
+
+    // 모든 사용자의 이름 추출
+    const allUsers = [...new Set(assetData.map(item => item.name))];
+    const currentUserName = userName; // 로그인한 사용자 이름
+    const datasets = allUsers.map((name, index) => ({
+      label: name,
+      data: getUserData(name),
+      borderColor: name === currentUserName ? 'blue' : ['orange', 'green', 'purple', 'red'][index % 4],
+      borderWidth: 2,
+      borderDash: name === currentUserName ? [] : [5, 5], // 현재 사용자는 실선, 나머지는 점선
+      fill: false,
+      spanGaps: true,
+      pointRadius: 5,
+      pointHoverRadius: 7,
+    }));
 
     return {
       labels: uniqueDates,
-      datasets: [
-        {
-          label: '김창민',
-          data: getUserData('김창민', true),
-          borderColor: 'blue',
-          borderWidth: 2,
-          fill: false,
-          spanGaps: true,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-        },
-        {
-          label: '배민석',
-          data: getUserData('배민석', false),
-          borderColor: 'orange',
-          borderWidth: 2,
-          borderDash: [5, 5],
-          fill: false,
-          spanGaps: true,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-        },
-        {
-          label: '조영채',
-          data: getUserData('조영채', false),
-          borderColor: 'green',
-          borderWidth: 2,
-          borderDash: [5, 5],
-          fill: false,
-          spanGaps: true,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-        },
-      ],
+      datasets,
     };
   })() : {
     labels: [],
