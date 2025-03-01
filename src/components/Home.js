@@ -299,16 +299,19 @@ function Home() {
       const userData = assetData.filter(item => item.name === name && item.currentUser === isCurrentUser);
       const result = uniqueDates.map(date => {
         const entry = userData.find(item => moment(item.date).format('YYYY-MM-DD') === date);
-        if (entry) {
-          return entry.todayTotal || 0; // 해당 날짜에 데이터가 있으면 사용
+        if (entry && entry.todayTotal > 0) {
+          return entry.todayTotal; // todayTotal이 0보다 크면 해당 값을 사용
         } else {
-          // 해당 날짜에 데이터가 없으면 이전 날짜에서 가장 최근 값을 찾음
-          const previousEntries = userData.filter(item => moment(item.date).isBefore(moment(date)));
+          // todayTotal이 0이거나 데이터가 없으면 이전 날짜에서 0보다 큰 가장 최근 값을 찾음
+          const previousEntries = userData
+            .filter(item => moment(item.date).isBefore(moment(date)) && item.todayTotal > 0)
+            .sort((a, b) => moment(b.date).valueOf() - moment(a.date).valueOf());
+
           if (previousEntries.length > 0) {
-            const latestEntry = previousEntries.sort((a, b) => moment(b.date).valueOf() - moment(a.date).valueOf())[0];
-            return latestEntry.todayTotal || 0;
+            const latestEntry = previousEntries[0]; // 가장 최근 값
+            return latestEntry.todayTotal;
           }
-          return 0; // 이전 데이터가 없으면 0
+          return 0; // 이전에 0보다 큰 값이 없으면 0 반환
         }
       });
       return result;
