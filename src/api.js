@@ -26,6 +26,23 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error('응답 에러:', error);
+
+    // 401 Unauthorized 오류 감지 (토큰 만료 또는 유효하지 않은 경우)
+    if (error.response && error.response.status === 401) {
+      console.log('토큰이 만료되었거나 유효하지 않습니다. 로그아웃 처리합니다.');
+      localStorage.removeItem('bearerToken'); // 토큰 삭제
+      
+      // 리다이렉트 처리
+      window.location.href = '/'; // 직접 리다이렉트
+    }
+    if (error.response.status === 404) {
+      console.log('올바른 접근이 아닌거같아. 로그아웃 처리합니다.');
+      localStorage.removeItem('bearerToken'); // 토큰 삭제
+      
+      // 리다이렉트 처리
+      window.location.href = '/'; // 직접 리다이렉트
+    }
+
     return Promise.reject(error);
   }
 );

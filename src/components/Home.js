@@ -295,14 +295,23 @@ function Home() {
       .sort((a, b) => moment(a).valueOf() - moment(b).valueOf());
 
     const getUserData = (name, isCurrentUser) => {
-      return uniqueDates.map(date => {
-        const entry = assetData.find(item =>
-          moment(item.date).format('YYYY-MM-DD') === date &&
-          item.name === name &&
-          item.currentUser === isCurrentUser
-        );
-        return entry ? entry.todayTotal || 0 : 0;
+      // 사용자별 데이터 매핑
+      const userData = assetData.filter(item => item.name === name && item.currentUser === isCurrentUser);
+      const result = uniqueDates.map(date => {
+        const entry = userData.find(item => moment(item.date).format('YYYY-MM-DD') === date);
+        if (entry) {
+          return entry.todayTotal || 0; // 해당 날짜에 데이터가 있으면 사용
+        } else {
+          // 해당 날짜에 데이터가 없으면 이전 날짜에서 가장 최근 값을 찾음
+          const previousEntries = userData.filter(item => moment(item.date).isBefore(moment(date)));
+          if (previousEntries.length > 0) {
+            const latestEntry = previousEntries.sort((a, b) => moment(b.date).valueOf() - moment(a.date).valueOf())[0];
+            return latestEntry.todayTotal || 0;
+          }
+          return 0; // 이전 데이터가 없으면 0
+        }
       });
+      return result;
     };
 
     return {
