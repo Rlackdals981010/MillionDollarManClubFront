@@ -32,7 +32,7 @@ function RevenueLog() {
   }, []);
 
   const formatMoney = (amount) => {
-    return new Intl.NumberFormat('ko-KR').format(amount) + '₩';
+    return new Intl.NumberFormat('ko-KR').format(amount) + '$';
   };
 
   const handleHome = () => {
