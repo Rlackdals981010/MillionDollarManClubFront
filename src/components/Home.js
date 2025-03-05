@@ -351,11 +351,11 @@ for (let i = 1; i <= daysInMonth; i++) {
     scales: {
       y: {
         beginAtZero: true,
-        min: 0,
+        min: 1000,
         max: 30000,
         ticks: {
           color: '#666',
-          stepSize: 50,
+          stepSize: 100,
           callback: function (value) {
             return value.toLocaleString() + '$';
           },
