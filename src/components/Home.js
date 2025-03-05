@@ -352,7 +352,7 @@ for (let i = 1; i <= daysInMonth; i++) {
       y: {
         beginAtZero: true,
         min: 1000,
-        max: 30000,
+        max: 25000,
         ticks: {
           color: '#666',
           stepSize: 100,
