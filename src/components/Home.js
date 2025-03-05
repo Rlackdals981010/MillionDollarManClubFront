@@ -355,7 +355,7 @@ for (let i = 1; i <= daysInMonth; i++) {
         max: 30000,
         ticks: {
           color: '#666',
-          stepSize: 100,
+          stepSize: 50,
           callback: function (value) {
             return value.toLocaleString() + '$';
           },
