@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'https://milliondollarmanclub.onrender.com', // Spring 서버 주소 (필요하면 변경)
-  //baseURL: 'http://localhost:8080', // Spring 서버 주소 (필요하면 변경)
+  // baseURL: 'http://localhost:8080', // Spring 서버 주소 (필요하면 변경)
   headers: {
     'Content-Type': 'application/json',
   },
@@ -32,14 +32,14 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       console.log('토큰이 만료되었거나 유효하지 않습니다. 로그아웃 처리합니다.');
       localStorage.removeItem('bearerToken'); // 토큰 삭제
-      
+
       // 리다이렉트 처리
       window.location.href = '/'; // 직접 리다이렉트
     }
     if (error.response.status === 404) {
       console.log('올바른 접근이 아닌거같아. 로그아웃 처리합니다.');
       localStorage.removeItem('bearerToken'); // 토큰 삭제
-      
+
       // 리다이렉트 처리
       window.location.href = '/'; // 직접 리다이렉트
     }
