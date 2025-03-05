@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // baseURL: 'https://milliondollarmanclub.onrender.com', // Spring 서버 주소 (필요하면 변경)
-  baseURL: 'http://localhost:8080', // Spring 서버 주소 (필요하면 변경)
+  baseURL: 'https://milliondollarmanclub.onrender.com', // Spring 서버 주소 (필요하면 변경)
+  // baseURL: 'http://localhost:8080', // Spring 서버 주소 (필요하면 변경)
   headers: {
     'Content-Type': 'application/json',
   },
