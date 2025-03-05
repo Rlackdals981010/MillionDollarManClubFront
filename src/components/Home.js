@@ -246,45 +246,45 @@ function Home() {
   const totalDays = daysInMonth + firstDayOfMonth; // 총 셀 수 (빈 셀 포함)
   const rows = Math.ceil(totalDays / 7); // 7일(요일)로 나누어 행 수 계산
 
-  const calendarGrid = [];
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    calendarGrid.push({ day: null, status: 'empty' });
+const calendarGrid = [];
+for (let i = 0; i < firstDayOfMonth; i++) {
+  calendarGrid.push({ day: null, status: 'empty' });
+}
+for (let i = 1; i <= daysInMonth; i++) {
+  const date = moment([currentYear, currentMonth - 1, i]).toDate(); // Asia/Seoul 기준
+  const yearMonthDay = moment(date).format('YYYY-MM-DD');
+  const todayFormatted = moment(currentDateObj).format('YYYY-MM-DD');
+  const quest = monthlyQuest?.[yearMonthDay] !== undefined ? monthlyQuest[yearMonthDay] : false;
+
+  const revenueData = monthlyRevenue?.find(r => {
+    const revenueDate = moment(r.date).format('YYYY-MM-DD');
+    return revenueDate === yearMonthDay;
+  }) || {
+    date: date,
+    addedRevenueMoney: 0.0,
+    addedSaveMoney: 0.0,
+    addedRevenuePercent: 0.0,
+    todayTotal: 0.0,
+    quest: false,
+  };
+
+  // 상태 결정 로직
+  let status;
+  if (yearMonthDay === todayFormatted) {
+    status = 'today'; // 오늘은 노란색
+  } else if (moment(date).isAfter(currentDateObj)) {
+    status = 'future'; // 오늘 이후는 회색
+  } else {
+    status = quest ? 'green' : 'red'; // 과거 날짜는 퀘스트 여부로 초록/빨강
   }
-  for (let i = 1; i <= daysInMonth; i++) {
-    const date = moment([currentYear, currentMonth - 1, i]).toDate(); // Asia/Seoul 기준
-    const yearMonthDay = moment(date).format('YYYY-MM-DD');
-    const todayFormatted = moment(currentDateObj).format('YYYY-MM-DD');
-    const quest = monthlyQuest?.[yearMonthDay] !== undefined ? monthlyQuest[yearMonthDay] : false;
 
-    const revenueData = monthlyRevenue?.find(r => {
-      const revenueDate = moment(r.date).format('YYYY-MM-DD');
-      return revenueDate === yearMonthDay;
-    }) || {
-      date: date,
-      addedRevenueMoney: 0.0,
-      addedSaveMoney: 0.0,
-      addedRevenuePercent: 0.0,
-      todayTotal: 0.0,
-      quest: false,
-    };
-
-    // 상태 결정 로직
-    let status;
-    if (yearMonthDay === todayFormatted) {
-      status = 'today'; // 오늘은 노란색
-    } else if (moment(date).isAfter(currentDateObj)) {
-      status = 'future'; // 오늘 이후는 회색
-    } else {
-      status = quest ? 'green' : 'red'; // 과거 날짜는 퀘스트 여부로 초록/빨강
-    }
-
-    calendarGrid.push({
-      day: i,
-      status: status,
-      data: revenueData,
-      isToday: yearMonthDay === todayFormatted, // 기존 isToday 유지 (필요 시 활용)
-    });
-  }
+  calendarGrid.push({
+    day: i,
+    status: status,
+    data: revenueData,
+    isToday: yearMonthDay === todayFormatted, // 기존 isToday 유지 (필요 시 활용)
+  });
+}
 
   const handleDateClick = (day) => {
     if (!day) return;
@@ -352,10 +352,10 @@ function Home() {
       y: {
         beginAtZero: true,
         min: 0,
-        max: 100000,
+        max: 30000,
         ticks: {
           color: '#666',
-          stepSize: 1000,
+          stepSize: 100,
           callback: function (value) {
             return value.toLocaleString() + '$';
           },
