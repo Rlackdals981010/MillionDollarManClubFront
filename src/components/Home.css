@@ -208,7 +208,8 @@
     color: #607081;
     font-size: 13px;
     font-weight: 600;
-    text-align: center;
+    text-align: left; /* 가운데 정렬 */
+    padding: 12px; /* 내부 여백 */
 }
 
 .calendar-day {
@@ -247,6 +248,11 @@
 .calendar-day.empty {
     background-color: #f0f0f0;
 }
+
+.calendar-day.weekend {
+    background-color: transparent; /* 색상 제거 */
+    /* 필요 시 추가 스타일 */
+  }
 
 .graph-section {
     width: 100%;
