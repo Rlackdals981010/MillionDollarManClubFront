@@ -3,6 +3,7 @@ import api from '../api';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { jwtDecode } from 'jwt-decode';
+import './Common.css'; // 공통 스타일 import
 import './Home.css';
 import moment from 'moment-timezone'; // moment-timezone 임포트
 import { useNavigate } from 'react-router-dom';

@@ -1,81 +1,4 @@
-/* Base layout */
-.home-container {
-    display: flex;
-    min-height: 100vh;
-    background: #F5F6F6;
-    font-family: Pretendard, -apple-system, system-ui, sans-serif;
-}
-
-.sidebar {
-    width: 165px;
-    background: #FFF;
-    padding: 50px 0px 0px 20px;
-    box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.08);
-    position: fixed;
-    height: 100vh;
-    z-index: 10; /* 사이드바를 다른 요소보다 위에 배치 */
-    left: 0;
-    top: 0;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 8px;
-    margin-bottom: 32px;
-    color: #607081;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    background: none;
-    border: none;
-    width: 100%; /* 버튼이 li와 동일한 너비를 가지도록 */
-    text-align: left; /* 텍스트 왼쪽 정렬 */
-    pointer-events: auto; /* 클릭 이벤트를 명시적으로 활성화 */
-}
-
-.sidebar-button:hover {
-    color: #0A83FF; /* 모든 버튼에 호버 시 파란색으로 변경 */
-}
-
-/* "홈"과 "로그아웃"의 색상 및 클릭 스타일 */
-.sidebar-button:nth-child(1) { /* "홈" */
-    color: blue; /* 기본 파란색 */
-}
-
-.sidebar-button:nth-child(5) { /* "로그아웃" */
-    color: red; /* 기본 빨간색 */
-}
-
-.main-content {
-    margin-left: 165px; /* 사이드바 너비와 정확히 맞춐 */
-    padding: 72px;
-    width: calc(100% - 165px); /* 사이드바 너비만큼 뺌 */
-    max-width: 1920px;
-    margin: 0 auto;
-    z-index: 20; /* main-content를 사이드바 위에 배치 */
-    position: relative; /* 상대 위치로 설정하여 오버랩 방지 */
-}
-
-.content-wrapper {
-    max-width: 1425px;
-    margin: 0 auto;
-}
-
-.page-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 10px;
-}
-
+/* SeedLog.css에만 필요한 스타일 */
 .table-header {
     display: flex;
     align-items: center;
@@ -83,31 +6,31 @@
     margin-bottom: 10px;
 }
 
-.page-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1E2429;
-}
-
 /* 시드 설정 입력란 및 요약 행 */
 .seed-input-row {
     display: flex;
     align-items: center;
     gap: 24px;
+    /* 기본 간격 */
     margin-bottom: 24px;
+    justify-content: space-between;
+    /* 요소 간 간격 분배 */
 }
 
 .seed-input-container {
-    
     border-radius: 12px;
-    
     display: flex;
     gap: 12px;
     align-items: center;
+    flex: 1;
+    /* 유연한 너비 */
+    min-width: 300px;
+    /* 최소 너비 설정 */
 }
 
 .seed-input {
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
     height: 20px;
     padding: 10px;
     border: 1px solid #D0D6DC;
@@ -135,19 +58,21 @@
     border: 1px solid #D0D6DC;
     border-radius: 12px;
     padding: 10px 16px;
-    margin-left: 400px;
     align-items: center;
     font-size: 16px;
     font-weight: 600;
     color: #1E2429;
+    flex-shrink: 0;
+    /* 크기가 줄어들지 않도록 */
 }
 
-.seed-summary span:nth-child(1) { /* "추가된 시드" 텍스트와 금액 */
-    color: #0A83FF; /* 파란색 */
+/* "추가된 시드"와 "내 최초 시드" 색상 */
+.seed-summary span:nth-child(1) {
+    color: #0A83FF;
 }
 
-.seed-summary span:nth-child(2) { /* "내 최초 시드" 텍스트와 금액 */
-    color: #000; /* 검은색 */
+.seed-summary span:nth-child(2) {
+    color: #000;
 }
 
 /* 시드 로그 테이블 */
@@ -168,7 +93,7 @@
     text-align: center;
     font-size: 16px;
     color: #1E2429;
-    width: 33.33%; /* 3개의 컬럼을 균등하게 나누기 위해 33.33%씩 설정 */
+    width: 33.33%;
 }
 
 .seed-table th {
@@ -190,99 +115,82 @@
     background-color: #F9F9F9;
 }
 
-/* Pagination (seed-table-container 내부에 위치하도록 조정) */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 16px; /* 패딩과 조화롭게 */
-    gap: 8px;
-}
-
-.pagination-button {
-    padding: 8px 12px;
-    border: 1px solid #D0D6DC;
-    border-radius: 4px;
-    background: #FFF;
-    color: #666;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.pagination-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.pagination-button.active {
-    background: #0A83FF;
-    color: #FFF;
-    border-color: #0A83FF;
-}
-
-.pagination-button:hover:not(:disabled):not(.active) {
-    background: #F5F6F6;
-    color: #1E2429;
-}
-
-/* Loading state */
-.loading-state {
-    padding: 20px;
-    text-align: center;
-    color: #607081;
-}
-
-/* Error state */
-.error-state {
-    padding: 20px;
-    text-align: center;
-    color: #F28282;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 60px;
-    }
-
-    .sidebar-button span {
-        display: none;
-    }
-
-    .main-content {
-        margin-left: 60px; /* 사이드바 너비에 맞춰 조정 */
-        padding: 20px;
-    }
-
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
     .seed-input-row {
-        flex-direction: column;
+        gap: 16px;
+        /* 간격 줄이기 */
+    }
+
+    .seed-input-container {
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .seed-input-row {
         gap: 12px;
-        align-items: flex-start;
+        /* 간격 더 줄이기 */
     }
 
     .seed-input-container,
     .seed-table-container {
-        padding: 12px 16px; /* 모바일에서 패딩 감소 */
+        padding: 12px 16px;
     }
 
     .seed-input {
-        width: 100%; /* 모바일에서 입력 필드 너비 100% */
+        width: 100%;
     }
 
     .seed-table th,
     .seed-table td {
         padding: 10px;
         font-size: 14px;
-        width: 33.33%; /* 모바일에서도 균등한 너비 유지 */
+        width: 33.33%;
     }
 
-    .pagination-button {
-        padding: 6px 10px;
+    .seed-summary {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .seed-input-row {
+        flex-direction: column;
+        /* 세로로 쌓이도록 */
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .seed-input-container,
+    .seed-table-container {
+        padding: 12px 16px;
+    }
+
+    .seed-input {
+        width: 100%;
+    }
+
+    .seed-table th,
+    .seed-table td {
+        padding: 10px;
+        font-size: 14px;
+        width: 33.33%;
+    }
+
+    .seed-summary {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .seed-table th,
+    .seed-table td {
         font-size: 12px;
     }
 
     .seed-summary {
-        font-size: 14px; /* 모바일에서 텍스트 크기 조정 */
+        font-size: 12px;
     }
 }

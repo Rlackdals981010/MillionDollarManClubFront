@@ -1,57 +1,4 @@
-.home-container {
-    display: flex;
-    min-height: 100vh;
-    background: #F5F6F6;
-}
-
-.sidebar {
-    width: 165px;
-    background: #FFF;
-    padding: 50px 20px;
-    box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.08);
-    position: fixed;
-    height: 100vh;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    /* 패딩을 늘려 클릭 범위 확장 */
-    margin-bottom: 32px;
-    color: #607081;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    /* sidebar 너비를 모두 활용 */
-    box-sizing: border-box;
-    /* 패딩이 너비에 포함되도록 */
-    transition: background-color 0.2s ease;
-    /* 호버 효과 추가 (선택 사항) */
-}
-
-
-
-.main-content {
-    margin-left: 165px;
-    padding: 72px;
-    width: calc(100% - 165px);
-    box-sizing: border-box;
-    position: relative;
-    z-index: 1;
-}
-
+/* Home.css에만 필요한 스타일 */
 .header {
     color: #1E2429;
     font-size: 24px;
@@ -63,17 +10,20 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
-    width: 1425px;
+    width: 100%;
+    max-width: 1425px;
     margin: 0 auto;
 }
 
 .left-column {
     display: flex;
     gap: 60px;
+    flex-wrap: wrap;
 }
 
 .challenge-assets-column {
-    width: 765px;
+    flex: 1;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -193,12 +143,11 @@
 }
 
 .calendar-section {
-    width: 440px;
-    /* calendar-day-header의 너비(7 * 40px + 6 * 24px = 520px) + 패딩(40px * 2) + 40px 여백 */
+    flex: 1;
+    min-width: 300px;
     background: #FFF;
     border-radius: 12px;
     padding: 32px 40px;
-    /* 패딩을 유지하면서 오른쪽 끝 40px 여백 계산 */
 }
 
 .calendar-section-rows-5 {
@@ -210,13 +159,10 @@
 }
 
 .calendar-header {
-    width: 440px;
-    /* 캘린더의 전체 폭 유지 */
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    /* 좌측(월/년도, 화살표)와 우측(버튼)을 분배 */
     align-items: center;
-    /* 수직 중앙 정렬 */
     padding-bottom: 24px;
     border-bottom: 1px solid #D0D6DC;
 }
@@ -225,7 +171,6 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    /* <h2>와 calendar-controls 간의 간격 설정 */
 }
 
 .calendar-header h2 {
@@ -234,20 +179,13 @@
     font-weight: 600;
 }
 
-/* <와 > 버튼을 감싸는 컨테이너 */
 .calendar-controls {
     display: flex;
     gap: 0px;
-    /* <와 > 버튼 간의 간격 */
     align-items: center;
-}
-
-.calendar-controls {
-    display: flex;
     border: 1px solid #D0D6DC;
     border-radius: 4px;
 }
-
 
 .calendar-controls button {
     width: 32px;
@@ -258,17 +196,15 @@
 }
 
 .calendar-grid {
-    width: 520px;
-    /* calendar-day-header의 너비(7 * 40px + 6 * 24px)와 동일 */
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(7, 40px);
+    grid-template-columns: repeat(7, 1fr);
     gap: 24px;
     margin-top: 24px;
 }
 
 .calendar-day-header {
-    width: 40px;
-    /* 각 헤더 셀의 너비를 명시적으로 설정 */
+    width: 100%;
     color: #607081;
     font-size: 13px;
     font-weight: 600;
@@ -289,37 +225,32 @@
 
 .calendar-day.green {
     background-color: #d4edda;
-    /* 퀘스트 완료 - 초록색 */
     color: #155724;
 }
 
 .calendar-day.red {
     background-color: #f8d7da;
-    /* 퀘스트 미완료 - 빨간색 */
     color: #721c24;
 }
 
 .calendar-day.today {
     background-color: #fff3cd;
-    /* 오늘 - 노란색 */
     color: #856404;
     border: 2px solid #ffc107;
-    /* 강조용 테두리 */
 }
 
 .calendar-day.future {
     background-color: #e9ecef;
-    /* 오늘 이후 - 회색 */
     color: #495057;
 }
 
 .calendar-day.empty {
     background-color: #f0f0f0;
-    /* 빈 셀 */
 }
 
 .graph-section {
-    width: 1425px;
+    width: 100%;
+    max-width: 1425px;
     background: #FFF;
     border-radius: 12px;
     padding: 24px 32px;
@@ -426,8 +357,6 @@
     cursor: pointer;
 }
 
-/* 화살표 버튼 스타일 (기존 캘린더 버튼과 동일) */
-/* 버튼 스타일 */
 .calendar-header button {
     width: 32px;
     height: 32px;
@@ -451,50 +380,61 @@
     background-color: #F5F7F9;
 }
 
-/* "전체 내역보기 >" 버튼 스타일 */
 .TotalLogButton button {
-    display: 10px;
+    display: flex;
     width: 150px;
     align-items: center;
     gap: 4px;
-    /* 텍스트와 화살표 간격 */
     background-color: transparent;
-    /* 배경 투명 */
     border: none;
     padding: 6px 0px 6px 30px;
-    /* 내부 여백 */
     font-size: 14px;
-    /* 텍스트 크기 */
     color: #6B7280;
-    /* 회색 텍스트, 캘린더 테마와 조화 */
     font-weight: 500;
-    /* 기본 텍스트 무게 */
     cursor: pointer;
-    /* 마우스 올리면 손 모양 */
     transition: all 0.2s ease;
-    /* 부드러운 전환 효과 */
 }
 
-/* 호버 효과 */
 .TotalLogButton button:hover {
     background-color: #F5F7F9;
-    /* 밝은 회색 배경, 캘린더 버튼 호버와 동일 */
     border-color: #D0D6DC;
-    /* 테두리 색상 유지 */
 }
 
-/* 클릭 효과 */
 .TotalLogButton button:active {
     background-color: #F5F7F9;
-    /* 클릭 시 밝은 회색 유지 */
 }
 
-/* 반응형 디자인 (필요 시) */
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .sidebar li {
+        font-size: 13px;
+        padding: 8px 6px;
+    }
+
+    .left-column {
+        flex-direction: column;
+    }
+
+    .challenge-assets-column,
+    .calendar-section {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar li {
+        margin-bottom: 0;
+        font-size: 13px;
+    }
+}
+
 @media (max-width: 480px) {
     .TotalLogButton button {
         font-size: 12px;
-        /* 작은 화면에서 텍스트 크기 조정 */
         padding: 4px 10px;
-        /* 여백 조정 */
+    }
+
+    .sidebar li {
+        font-size: 12px;
     }
 }

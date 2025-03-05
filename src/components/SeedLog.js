@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import moment from 'moment-timezone';
+import './Common.css'; // 공통 스타일 import
 import './SeedLog.css';
 
 // moment를 Asia/Seoul 시간대로 설정

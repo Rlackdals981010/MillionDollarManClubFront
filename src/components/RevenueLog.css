@@ -1,93 +1,9 @@
-/* Base layout */
-.home-container {
-    display: flex;
-    min-height: 100vh;
-    background: #F5F6F6;
-    font-family: Pretendard, -apple-system, system-ui, sans-serif;
-}
-
-.sidebar {
-    width: 165px;
-    background: #FFF;
-    padding: 50px 0px 0px 20px;
-    box-shadow: 2px 0px 10px 0px rgba(0, 0, 0, 0.08);
-    position: fixed;
-    height: 100vh;
-    z-index: 10; /* 사이드바를 다른 요소보다 위에 배치 */
-    left: 0;
-    top: 0;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 8px;
-    margin-bottom: 32px;
-    color: #607081;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    pointer-events: auto; /* 클릭 이벤트를 명시적으로 활성화 */
-}
-
-.sidebar li:first-child {
-    color: #0A83FF; /* "홈" 기본 색상 유지, onClick 시 blue로 오버라이드 */
-}
-
-.sidebar li:hover {
-    color: #0A83FF; /* 모든 항목에 호버 시 파란색으로 변경 */
-}
-
-/* "홈"과 "로그아웃"의 색상 및 클릭 스타일 */
-.sidebar li:nth-child(1) { /* "홈" */
-    color: blue; /* 기본 파란색 */
-}
-
-.sidebar li:nth-child(5) { /* "로그아웃" */
-    color: red; /* 기본 빨간색 */
-}
-
-.main-content {
-    margin-left: 165px; /* 사이드바 너비와 정확히 맞춤 */
-    padding: 72px;
-    width: calc(100% - 165px); /* 사이드바 너비만큼 뺌 */
-    max-width: 1920px;
-    margin: 0 auto;
-    z-index: 20; /* main-content를 사이드바 위에 배치 */
-    position: relative; /* 상대 위치로 설정하여 오버랩 방지 */
-}
-
-.content-wrapper {
-    max-width: 1425px;
-    margin: 0 auto;
-}
-
-.page-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 24px;
-}
-
-.page-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1E2429;
-}
-
 /* Table Container (challenge-section 스타일과 유사) */
 .revenue-table-container {
     background: #FFF;
     border-radius: 12px;
-    padding: 16px 24px; /* challenge-section의 패딩과 동일 */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05); /* challenge-section과 동일한 그림자 효과 */
+    padding: 16px 24px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* Table */
@@ -102,7 +18,7 @@
     text-align: center;
     font-size: 16px;
     color: #1E2429;
-    width: 20%; /* 5개의 컬럼을 균등하게 나누기 위해 20%씩 설정 */
+    width: 20%;
 }
 
 .revenue-table th {
@@ -117,7 +33,7 @@
 
 /* 수익률 음수 처리 */
 .revenue-table td.negative {
-    color: #F28282; /* 음수일 때 빨간색으로 표시 */
+    color: #F28282;
 }
 
 /* 테이블 행 호버 효과 */
@@ -127,56 +43,6 @@
 
 .revenue-table tr:hover {
     background-color: #F9F9F9;
-}
-
-/* Pagination (revenue-table-container 내부에 위치하도록 조정) */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 16px; /* 패딩과 조화롭게 */
-    gap: 8px;
-}
-
-.pagination-button {
-    padding: 8px 12px;
-    border: 1px solid #D0D6DC;
-    border-radius: 4px;
-    background: #FFF;
-    color: #666;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.pagination-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.pagination-button.active {
-    background: #0A83FF;
-    color: #FFF;
-    border-color: #0A83FF;
-}
-
-.pagination-button:hover:not(:disabled):not(.active) {
-    background: #F5F6F6;
-    color: #1E2429;
-}
-
-/* Loading state */
-.loading-state {
-    padding: 20px;
-    text-align: center;
-    color: #607081;
-}
-
-/* Error state */
-.error-state {
-    padding: 20px;
-    text-align: center;
-    color: #F28282;
 }
 
 /* Quest status */
@@ -197,34 +63,36 @@
     color: #F28282;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 60px;
-    }
-
-    .sidebar li span {
-        display: none;
-    }
-
-    .main-content {
-        margin-left: 60px; /* 사이드바 너비에 맞춰 조정 */
-        padding: 20px;
-    }
-
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
     .revenue-table th,
     .revenue-table td {
         padding: 10px;
         font-size: 14px;
-        width: 20%; /* 모바일에서도 균등한 너비 유지 */
-    }
-
-    .pagination-button {
-        padding: 6px 10px;
-        font-size: 12px;
+        width: 20%;
     }
 
     .revenue-table-container {
-        padding: 12px 16px; /* 모바일에서 패딩 감소 */
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .revenue-table th,
+    .revenue-table td {
+        padding: 10px;
+        font-size: 14px;
+        width: 20%;
+    }
+
+    .revenue-table-container {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .revenue-table th,
+    .revenue-table td {
+        font-size: 12px;
     }
 }

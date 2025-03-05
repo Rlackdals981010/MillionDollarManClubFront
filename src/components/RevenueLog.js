@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import moment from 'moment-timezone';
+import './Common.css'; // 공통 스타일 import
 import './RevenueLog.css';
 
 // moment를 Asia/Seoul 시간대로 설정
@@ -12,7 +13,7 @@ function RevenueLog() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // 페이지당 항목 수, 스크린샷과 동일
+  const [itemsPerPage] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +36,7 @@ function RevenueLog() {
   };
 
   const handleHome = () => {
-    console.log('Clicked Home'); // 디버깅용 로그
+    console.log('Clicked Home');
     navigate('/home');
   };
   const handleSeed = () => {
@@ -43,22 +44,22 @@ function RevenueLog() {
     navigate('/seed');
   };
   const handleLogout = () => {
-    console.log('Clicked Logout'); // 디버깅용 로그
+    console.log('Clicked Logout');
     localStorage.removeItem('bearerToken');
     navigate('/');
   };
 
   const formatPercent = (value) => {
-    return (value >= 0 ? '+ ' : '') + Number(value).toFixed(2) + '%'; // 음수와 양수 모두 올바르게 처리
+    return (value >= 0 ? '+ ' : '') + Number(value).toFixed(2) + '%';
   };
 
-  // 페이지네이션 로직
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = revenueData.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(revenueData.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   if (loading) return (
     <div className="home-container">
       <aside className="sidebar">
@@ -122,7 +123,9 @@ function RevenueLog() {
                     <td className="revenue-table td">{moment(item.date).format('YYYY-MM-DD')}</td>
                     <td className="revenue-table td">{formatMoney(item.addedRevenueMoney)}</td>
                     <td className="revenue-table td">{formatMoney(item.addedSaveMoney)}</td>
-                    <td className="revenue-table td">{formatPercent(item.addedRevenuePercent)}</td>
+                    <td className={`revenue-table td ${item.addedRevenuePercent < 0 ? 'negative' : ''}`}>
+                      {formatPercent(item.addedRevenuePercent)}
+                    </td>
                     <td className="revenue-table td">
                       <span className={`quest-status ${item.quest ? 'complete' : 'incomplete'}`}>
                         {item.quest ? 'O' : 'X'}
