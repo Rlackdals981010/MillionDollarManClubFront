@@ -287,18 +287,35 @@
     cursor: pointer;
 }
 
-.calendar-day.red {
-    background: #F28282;
-    color: #FFF;
+.calendar-day.green {
+    background-color: #d4edda;
+    /* 퀘스트 완료 - 초록색 */
+    color: #155724;
 }
 
-.calendar-day.green {
-    background: #7ED789;
-    color: #FFF;
+.calendar-day.red {
+    background-color: #f8d7da;
+    /* 퀘스트 미완료 - 빨간색 */
+    color: #721c24;
+}
+
+.calendar-day.today {
+    background-color: #fff3cd;
+    /* 오늘 - 노란색 */
+    color: #856404;
+    border: 2px solid #ffc107;
+    /* 강조용 테두리 */
+}
+
+.calendar-day.future {
+    background-color: #e9ecef;
+    /* 오늘 이후 - 회색 */
+    color: #495057;
 }
 
 .calendar-day.empty {
-    color: #D0D6DC;
+    background-color: #f0f0f0;
+    /* 빈 셀 */
 }
 
 .graph-section {
