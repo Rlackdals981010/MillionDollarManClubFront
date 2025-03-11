@@ -323,7 +323,7 @@ function Home() {
       return uniqueDates.map(date => {
         const entry = userData.find(item => moment(item.date).format('YYYY-MM-DD') === date);
         if (entry && entry.todayTotal > 0) {
-          return (entry.todayTotal / 1000).toFixed(2); // 🔥 1000으로 나눠서 K 단위 변환
+          return entry.todayTotal / 1000; // 🔥 1000으로 나눠서 K 단위 변환
         } else {
           const previousEntries = userData
             .filter(item => moment(item.date).isBefore(moment(date)) && item.todayTotal > 0)
@@ -361,16 +361,15 @@ function Home() {
     maintainAspectRatio: false,
     scales: {
       y: {
-        beginAtZero: false,
-        min: 0,
-        max: 30,
         ticks: {
           color: '#666',
-          stepSize: 1,
+          stepSize: 1, // 기존 1000 → 1 (K 단위)
           callback: function (value) {
-            return value.toFixed(2) + 'K'; // ✅ Y축에서도 소수점 2자리 적용
+            return value + 'K'; // 1000 단위 변환 후 K 단위 유지
           },
         },
+        suggestedMin: 0, // ✅ Chart.js에게 0부터 시작하도록 힌트 주기
+        suggestedMax: 30, // ✅ 최대값 30K로 힌트 주기
         title: { display: true, text: '자산 (K$)', color: '#666' },
       },
       x: {
