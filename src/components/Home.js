@@ -363,16 +363,16 @@ function Home() {
     scales: {
       y: {
         beginAtZero: true,
-        min: 1,
-        max: 30, // 기존 25000 → 250으로 수정 (1000 단위 적용)
+        min: 1000,
+        max: 25000,
         ticks: {
           color: '#666',
-          stepSize: 10, // 적절한 눈금 간격 설정
+          stepSize: 100,
           callback: function (value) {
-            return (value).toFixed(1) + 'K'; // 1.9K 같은 소수점 포함 포맷 적용
+            return value.toLocaleString() + '$';
           },
         },
-        title: { display: true, text: '자산 (K$)', color: '#666' },
+        title: { display: true, text: '자산 ($)', color: '#666' },
       },
       x: {
         ticks: {
@@ -407,7 +407,7 @@ function Home() {
             const label = context.dataset.label || '';
             const value = context.parsed.y || 0;
             const date = chartData.labels[context.dataIndex] || '';
-            return `${label}: ${value.toFixed(1)}K$ (${date})`; // 툴팁에서도 동일하게 소수점 표시
+            return `${label}: ${value.toLocaleString()}$ (${date})`;
           },
         },
       },
