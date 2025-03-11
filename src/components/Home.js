@@ -361,14 +361,14 @@ function Home() {
     maintainAspectRatio: false,
     scales: {
       y: {
-        beginAtZero: true,
-        min: 1, // 기존 1000 → 1 (K 단위)
+        beginAtZero: false,
+        min: 0, // 기존 1000 → 1 (K 단위)
         max: 30, // 기존 25000 → 25 (K 단위)
         ticks: {
           color: '#666',
           stepSize: 1, // 기존 1000 → 1 (K 단위)
           callback: function (value) {
-            return value.toFixed(1) + 'K'; // 1000 단위 변환 후 K 단위 유지
+            return value + 'K'; // 1000 단위 변환 후 K 단위 유지
           },
         },
         title: { display: true, text: '자산 (K$)', color: '#666' },
