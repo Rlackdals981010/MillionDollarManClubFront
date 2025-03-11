@@ -317,37 +317,36 @@ function Home() {
   const chartData = assetData && assetData.length > 0 ? (() => {
     const uniqueDates = [...new Set(assetData.map(item => moment(item.date).format('YYYY-MM-DD')))]
       .sort((a, b) => moment(a).valueOf() - moment(b).valueOf());
-
+  
     const getUserData = (name) => {
       const userData = assetData.filter(item => item.name === name);
       return uniqueDates.map(date => {
         const entry = userData.find(item => moment(item.date).format('YYYY-MM-DD') === date);
         if (entry && entry.todayTotal > 0) {
-          return entry.todayTotal;
+          return entry.todayTotal / 1000; // 🔥 1000으로 나눠서 K 단위 변환
         } else {
           const previousEntries = userData
             .filter(item => moment(item.date).isBefore(moment(date)) && item.todayTotal > 0)
             .sort((a, b) => moment(b.date).valueOf() - moment(a.date).valueOf());
-          return previousEntries.length > 0 ? previousEntries[0].todayTotal : 0;
+          return previousEntries.length > 0 ? previousEntries[0].todayTotal / 1000 : 0;
         }
       });
     };
-
-    // 모든 사용자의 이름 추출
+  
     const allUsers = [...new Set(assetData.map(item => item.name))];
-    const currentUserName = userName; // 로그인한 사용자 이름
+    const currentUserName = userName;
     const datasets = allUsers.map((name, index) => ({
       label: name,
       data: getUserData(name),
       borderColor: name === currentUserName ? 'blue' : ['orange', 'green', 'purple', 'red'][index % 4],
       borderWidth: 2,
-      borderDash: name === currentUserName ? [] : [5, 5], // 현재 사용자는 실선, 나머지는 점선
+      borderDash: name === currentUserName ? [] : [5, 5],
       fill: false,
       spanGaps: true,
       pointRadius: 5,
       pointHoverRadius: 7,
     }));
-
+  
     return {
       labels: uniqueDates,
       datasets,
@@ -363,16 +362,16 @@ function Home() {
     scales: {
       y: {
         beginAtZero: true,
-        min: 1000,
-        max: 25000,
+        min: 1, // 기존 1000 → 1 (K 단위)
+        max: 30, // 기존 25000 → 25 (K 단위)
         ticks: {
           color: '#666',
-          stepSize: 100,
+          stepSize: 1, // 기존 1000 → 1 (K 단위)
           callback: function (value) {
-            return value.toLocaleString() + '$';
+            return value.toFixed(1) + 'K'; // 1000 단위 변환 후 K 단위 유지
           },
         },
-        title: { display: true, text: '자산 ($)', color: '#666' },
+        title: { display: true, text: '자산 (K$)', color: '#666' },
       },
       x: {
         ticks: {
@@ -407,7 +406,7 @@ function Home() {
             const label = context.dataset.label || '';
             const value = context.parsed.y || 0;
             const date = chartData.labels[context.dataIndex] || '';
-            return `${label}: ${value.toLocaleString()}$ (${date})`;
+            return `${label}: ${value.toFixed(1)}K$ (${date})`; // 툴팁에서도 K 단위 적용
           },
         },
       },
