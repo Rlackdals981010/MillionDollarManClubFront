@@ -369,7 +369,7 @@ function Home() {
           },
         },
         suggestedMin: 0, // ✅ Chart.js에게 0부터 시작하도록 힌트 주기
-        suggestedMax: 30, // ✅ 최대값 30K로 힌트 주기
+        suggestedMax: 10, // ✅ 최대값 30K로 힌트 주기
         title: { display: true, text: '자산 (K$)', color: '#666' },
       },
       x: {
