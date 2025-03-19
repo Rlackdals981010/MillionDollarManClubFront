@@ -56,8 +56,8 @@ function SeedLog() {
     const handleSetSeed = async () => {
         try {
             const seedMoney = parseFloat(seedInput);
-            if (isNaN(seedMoney) || seedMoney <= 0) {
-                setError('유효한 시드 금액을 입력해주세요 (0보다 큰 숫자).');
+            if (isNaN(seedMoney) ) {
+                setError('유효한 시드 금액을 입력해주세요.');
                 return;
             }
 
